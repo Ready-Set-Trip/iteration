@@ -16,6 +16,7 @@ const variousController = {
         username,
         password,
       ]);
+      return next();
     } catch (err) {
       return next('error in createUser: ', err);
     }

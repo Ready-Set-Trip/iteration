@@ -12,7 +12,7 @@ import variousController from '../controllers/variousController';
 const router = express.Router();
 
 router.post('/', variousController.createUser, (req, res) => {
-    res.status(201).json({ user: res.locals.createdUser })
+    res.status(201).json({ user: res.locals.createdUser.rows[0] })
 });
 
 export default router;

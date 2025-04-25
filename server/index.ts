@@ -35,7 +35,7 @@ app.use(
  */
 
 // using path.resolve for express.static is recommended
-app.use(express.static(path.join(__dirname, '../client'))); // don't know if we have any static files yet
+//app.use(express.static(path.join(__dirname, '../client'))); // don't know if we have any static files yet, was causing errors
 
 /**
  * define route handlers
