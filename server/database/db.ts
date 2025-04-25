@@ -5,3 +5,9 @@
 // will also need trip table ... something with unique trip id, trip name, trip start and end dates... naything else? 
 // wondering how to handle which users are in which trips. perhaps another table that tracks this? (usernames or ids alongside trip ids?)
 // will also need a table to track individual trackers for each user in trip .. i.e. (user_id, workoutdays, healthydays, duodays...) 
+
+
+
+
+
+// does Pete mean like...having the data all in a .json file here (instead of .ts?) 

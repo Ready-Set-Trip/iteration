@@ -1,9 +1,10 @@
-// authenticates user upon login 
-// (listens for a post request from front end login) 
+// authenticates user upon login
+// (listens for a post request from front end login)
 
 import express from 'express';
+import bcrypt from 'bcrypt';
 
-import various from '../controllers/various';
+import variousController from '../controllers/variousController';
 
 const router = express.Router();
 // root of this file is localhost:3000/authentication/ (used to be /characters)
@@ -15,7 +16,5 @@ const router = express.Router();
 // router.post('/', characterController.createCharacter, fileController.saveCharacter, (req, res) => {
 //   res.status(200).json({ characters: res.locals.newCharacter });
 // });
-
-
 
 export default router;

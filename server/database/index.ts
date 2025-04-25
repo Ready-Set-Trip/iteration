@@ -2,7 +2,7 @@
 
 import path from 'path';
 import express from 'express';
-
+import cors from 'cors';
 const app = express();
 const PORT = 3000;
 
@@ -22,6 +22,13 @@ import tripsRouters from './routes/trips';
  * handle parsing request body
  */
 app.use(express.json());
+
+// allow frontend and backend to be run together with Cross-Origin Resource Sharing (CORS)
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+    })
+);
 
 /**
  * handle requests for static files
