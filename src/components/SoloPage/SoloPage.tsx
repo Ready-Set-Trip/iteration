@@ -18,7 +18,7 @@ interface SoloPageProps {
   username: string;
   progress: ProgressState;
   tripGoals: { workout: number; diet: number; language: number };
-  // prop function takes one arg called progress -- iwhic is a ProgressState object, and returns nothign
+  // prop function takes one arg progress -- iwhic is a ProgressState object, and returns nothign
   onProgressUpdate: (progress: ProgressState) => void;
 }
 // react component page that takes 4 props from GroupTripPage ... handles incrementing each category as needed
@@ -28,7 +28,7 @@ const SoloPage: React.FC<SoloPageProps> = ({
   tripGoals,
   onProgressUpdate,
 }) => {
-  // takes key of ProgressState -> so, must be workout, diet, or language
+  // takes key of ProgressState -> so, must be workout, diet, or language ... updates amount up to goal amount
   const handleIncrement = (key: keyof ProgressState) => {
     const updatedProgress = {
       ...progress,

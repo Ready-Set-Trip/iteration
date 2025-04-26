@@ -1,5 +1,5 @@
 // track workout & have clickable incrementor component
-// pull in progress bar to display progress
+// use progress bar to display progress
 
 import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
