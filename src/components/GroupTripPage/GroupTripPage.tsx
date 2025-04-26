@@ -8,6 +8,7 @@
 //import things you need!
 import React, { useState } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
+import MessageBoard from './MessageBoard';
 
 //LATER - figure out how to pass these numbers down and not hardcode ...
 const tripGoals = {
@@ -95,6 +96,8 @@ const GroupTripPage: React.FC = () => {
               </ul>
             </div>
           ))}
+          <h2>Message Board</h2>
+          <MessageBoard />
         </>
       ) : (
         <>
