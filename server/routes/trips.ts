@@ -4,7 +4,7 @@
 
 import express from 'express';
 
-import variousController from '../controllers/variousController';
+import variousController from '../controllers/signupController';
 
 const router = express.Router();
 // root of this file is localhost:3000/trips/ (used to be /characters)

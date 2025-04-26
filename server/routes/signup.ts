@@ -3,16 +3,15 @@
 // checks to see if user exists,
 // if not, sets up pw and saves new user
 
-
 import express, { json } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../models/databaseModel';
-import variousController from '../controllers/variousController';
+import signupController from '../controllers/signupController';
 
 const router = express.Router();
 
-router.post('/', variousController.createUser, (req, res) => {
-    res.status(201).json({ user: res.locals.createdUser.rows[0] })
+router.post('/', signupController.createUser, (req, res) => {
+  res.status(201).json({ user: res.locals.createdUser.rows[0] });
 });
 
 export default router;

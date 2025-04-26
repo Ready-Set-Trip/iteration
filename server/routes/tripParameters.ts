@@ -2,7 +2,7 @@
 // Will also need a function for the front end to retrive this info (GET REQ)
 
 import express from 'express';
-import variousController from '../controllers/variousController';
+import variousController from '../controllers/signupController';
 
 const router = express.Router();
 // root of this file is localhost:3000/tripParameters/ (used to be /characters)
