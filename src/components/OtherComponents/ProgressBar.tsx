@@ -25,4 +25,4 @@ const ProgressBar: React.FC<ProgressCircleProps> = ({ value, label, color = '#3e
     );
 };
 
-export default ProgressCircle; 
+export default ProgressBar; 
