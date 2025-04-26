@@ -4,8 +4,6 @@
 // if not, sets up pw and saves new user
 
 import express, { json } from 'express';
-import bcrypt from 'bcrypt';
-import db from '../models/databaseModel';
 import signupController from '../controllers/signupController';
 
 const router = express.Router();

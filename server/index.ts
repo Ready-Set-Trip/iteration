@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 /**
  * require routers
  */
-import authenticationRouters from './routes/authentication';
+import loginRouters from './routes/login';
 import signupRouters from './routes/signup';
 import tripParametersRouters from './routes/tripParameters';
 import tripsRouters from './routes/trips';
@@ -40,7 +40,7 @@ app.use(
 /**
  * define route handlers
  */
-app.use('/authentication', authenticationRouters);
+app.use('/login', loginRouters);
 app.use('/signup', signupRouters);
 app.use('/tripParameters', tripParametersRouters);
 app.use('/trips', tripsRouters);

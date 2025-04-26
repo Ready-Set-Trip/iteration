@@ -2,7 +2,7 @@ import path from 'path';
 import bcrypt from 'bcrypt';
 import db from '../models/databaseModel';
 
-const authenticationController = {
+const loginController = {
   async verifyUser(req, res, next) {
     const { username, password } = req.body;
     try {
@@ -11,9 +11,10 @@ const authenticationController = {
       // return 404 status if that Username isn't in the database
       if (result.rows.length === 0) return res.status(404).json({ error: 'User not found' });
 
-      const user = result.rows[0];
-      res.locals.username = user.username;
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const storedPass = result.rows[0].password;
+      console.log('stored pass', storedPass)
+      res.locals.username = username;
+      const passwordMatch = await bcrypt.compare(password, storedPass);
       if (passwordMatch) return next();
       else
         return next({
@@ -31,4 +32,4 @@ const authenticationController = {
   },
 };
 
-export default authenticationController;
+export default loginController;
