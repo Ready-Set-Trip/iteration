@@ -3,6 +3,7 @@
 // and send it to your friends (via email link) to come to the site and set up their profiles
 import React from 'react';
 import './template.css';
+
 const TripTemplate = () => {
   return (
     <div className='nametripcontainer'>
@@ -12,7 +13,6 @@ const TripTemplate = () => {
       </div>
       <div className='invitecontainer'>
         <label> Invite Your Friends</label>
-        <input type='email' placeholder='Enter email'></input>
         <input type='email' placeholder='Enter email'></input>
         <input type='email' placeholder='Enter email'></input>
         <input type='email' placeholder='Enter email'></input>
