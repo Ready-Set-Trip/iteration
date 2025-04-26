@@ -3,7 +3,6 @@ import db from '../models/databaseModel';
 
 const signupController = {
   async createUser(req, res, next) {
-    console.log('req.body: ', req.body)
     const { name, email, password } = req.body;
     res.locals.name = name;
     try {
