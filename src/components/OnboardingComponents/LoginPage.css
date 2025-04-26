@@ -2,26 +2,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: #fff;
+  /* height: 100vh;
+  width: 100vw; */
+  /* background: #fff; */
 }
 
 .logcontainer {
   display: flex;
   flex-direction: column;
-
   width: 600px;
   background: rgb(150, 188, 43);
   padding: 40px;
+  border-radius: 70px;
 }
 .logheader {
   display: flex;
   flex-direction: column;
-  padding-left: 40%;
   gap: 10px;
   width: 100%;
   margin-top: 30px;
-  /* align-items: center; */
+  align-items: center;
 }
 .text {
   color: black;
@@ -33,7 +33,7 @@
   height: 7px;
   background: black;
   border-radius: 10px;
-  margin-left: 50px;
+  margin: 0 auto;
 }
 .loginput-field {
   margin-top: 50px;
@@ -77,7 +77,7 @@
   margin: 60px auto;
   gap: 30px;
 }
-.submit {
+.submit-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,4 +88,9 @@
   color: white;
   font-size: 20px;
   cursor: pointer;
+}
+.errordanger {
+  display: block;
+  font-size: 10px;
+  color: red;
 }
