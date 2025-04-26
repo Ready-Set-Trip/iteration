@@ -27,11 +27,11 @@ function MessageBoard() {
           onChange={handleInputChange}
           placeholder='Whaddya wanna say to your TripMates?!'
         />
-        <textarea
+        {/* <textarea
           rows={3}
           placeholder="Message Here"
           value={newMessage}
-          onChange={handleInputChange}
+          onChange={handleInputChange} */}
         <button onClick={handlePostMessage}>Post</button>
       </div>
       <ul>
