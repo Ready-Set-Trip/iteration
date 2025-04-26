@@ -54,7 +54,7 @@ const SignUp = () => {
           throw new Error(message);
         }
         const data = await response.json();
-        navigate('/Login');
+        navigate('/');
         return data;
       } catch (error) {
         console.error('Login error:', error);

@@ -1,15 +1,17 @@
-import path from 'path';
 import bcrypt from 'bcrypt';
 import db from '../models/databaseModel';
 
 const signupController = {
   async createUser(req, res, next) {
-    const { username, password } = req.body;
+    console.log('req.body: ', req.body)
+    const { name, email, password } = req.body;
+    res.locals.name = name;
     try {
       console.log('trying to createUser');
       const hashedPass = await bcrypt.hash(password, 10);
-      res.locals.createdUser = await db.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [
-        username,
+      res.locals.createdUser = await db.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', [
+        name,
+        email,
         hashedPass,
       ]);
       return next();

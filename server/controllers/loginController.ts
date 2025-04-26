@@ -1,26 +1,33 @@
-import path from 'path';
 import bcrypt from 'bcrypt';
 import db from '../models/databaseModel';
 
 const loginController = {
   async verifyUser(req, res, next) {
-    const { username, password } = req.body;
+    const { name, email, password } = req.body;
+    res.locals.name = name;
     try {
       console.log('trying to verifyUser');
-      const result = await db.query('SELECT password FROM users WHERE username = $1', [username]);
+      const result = await db.query('SELECT password FROM users WHERE email = $1', [email]);
       // return 404 status if that Username isn't in the database
-      if (result.rows.length === 0) return res.status(404).json({ error: 'User not found' });
+      if (result.rows.length === 0) {
+        return next({
+          // TODO: fix logs/messages to obfuscate whether user or pass is wrong
+          log: 'verifyUser: username not found',
+          status: 404,
+          message: { err: 'Username not found' },
+        });
+      }
 
       const storedPass = result.rows[0].password;
-      console.log('stored pass', storedPass)
-      res.locals.username = username;
+      console.log('stored pass', storedPass);
       const passwordMatch = await bcrypt.compare(password, storedPass);
       if (passwordMatch) return next();
       else
         return next({
-          log: "verifyUser: username and password don't match",
+          // TODO: fix logs/messages to obfuscate whether user or pass is wrong
+          log: 'verifyUser: incorrect password',
           status: 401,
-          message: { err: 'Username and/or password is incorrect' },
+          message: { err: 'Password is incorrect' },
         });
     } catch (error) {
       return next({

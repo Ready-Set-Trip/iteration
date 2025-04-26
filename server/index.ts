@@ -1,6 +1,6 @@
 // set up your server (listen on port, etc) and set up access to the routes here 
 
-import path from 'path';
+//import path from 'path';
 import express from 'express';
 import cors from 'cors';
 const app = express();
@@ -58,7 +58,6 @@ app.use((req, res) => {
  */
 app.use((err, req, res, next) => {
   console.log('logging err:', err);
-  console.log('type of error:', typeof err);
   // defaultErr object
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',

@@ -3,13 +3,13 @@
 // checks to see if user exists,
 // if not, sets up pw and saves new user
 
-import express, { json } from 'express';
+import express from 'express';
 import signupController from '../controllers/signupController';
 
 const router = express.Router();
 
 router.post('/', signupController.createUser, (req, res) => {
-  res.status(201).json({ user: res.locals.createdUser.rows[0] });
+  res.status(201).json( { msg: `${res.locals.name} signed up!`  });
 });
 
 export default router;
