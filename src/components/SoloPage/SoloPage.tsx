@@ -1,7 +1,8 @@
 //main solo page component (pull other trackers in here)
+// stretch:
 // also include banner (pull in from props)
 
-import React, { useState } from 'react';
+import React from 'react';
 import WorkoutTracker from './WorkoutTracker';
 import DietTracker from './DietTracker';
 import LangTracker from './LangTracker';
@@ -17,23 +18,17 @@ interface SoloPageProps {
   username: string;
   progress: ProgressState;
   tripGoals: { workout: number; diet: number; language: number };
+  // prop function takes one arg called progress -- iwhic is a ProgressState object, and returns nothign
   onProgressUpdate: (progress: ProgressState) => void;
 }
-
-//replace this withe variables passed in from trip template. currently hardcoded.
-const tripGoals = {
-  workout: 15,
-  diet: 15,
-  language: 10,
-};
-
-// initializes state ... starts at 0 for all categories ... username and onProgressUpdate are passed in
+// react component page that takes 4 props from GroupTripPage ... handles incrementing each category as needed
 const SoloPage: React.FC<SoloPageProps> = ({
   username,
   progress,
   tripGoals,
   onProgressUpdate,
 }) => {
+  // takes key of ProgressState -> so, must be workout, diet, or language
   const handleIncrement = (key: keyof ProgressState) => {
     const updatedProgress = {
       ...progress,
@@ -42,16 +37,13 @@ const SoloPage: React.FC<SoloPageProps> = ({
     onProgressUpdate(updatedProgress); // Pass updated progress back to GroupTripPage
   };
 
-  //key of progress state is making sure we're handling only one tracker at a time
-  //use this to increment each tracker on progress bar
-  // math.min so we don't go over preset goal value
-
   // renders the page ... progess.workout for example is the value currently in useState of Progress for "workout"
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2> Put username here ... {username}'s Current Status</h2>
+      <h2> {username}'s Current Status</h2>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
         <WorkoutTracker
+          //passes 3 props to tracker
           value={progress.workout}
           goal={tripGoals.workout}
           onIncrement={() => handleIncrement('workout')}

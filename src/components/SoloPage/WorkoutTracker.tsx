@@ -12,7 +12,7 @@ interface TrackerProps {
   onIncrement: () => void;
 }
 
-//props received from parent (solo page)
+//3 props received from parent (solo page)
 const WorkoutTracker: React.FC<TrackerProps> = ({
   value,
   goal,

@@ -1,51 +1,74 @@
 // main group trip page
+// leaderboard &/or group stats with clickable individual user links
+
+// stretch:
 // pass down banner w/ top leader(s) & countdown
 // message board component pulled in here
-// full leaderboard &/or group stats with clickable individual user links
+
+//import things you need!
 import React, { useState } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
 
-//figure out how to pass these down and not hardcode ..
+//LATER - figure out how to pass these numbers down and not hardcode ...
 const tripGoals = {
   workout: 20,
   diet: 15,
   language: 10,
 };
-//set up state for page ...
+
+//helper function for calculating total. also ts for progress.
+const calculateTotal = (progress: {
+  workout: number;
+  diet: number;
+  language: number;
+}) => {
+  return progress.workout + progress.diet + progress.language;
+};
+
+//define page's react componenet
 const GroupTripPage: React.FC = () => {
+  //useState for each user (keep track of which user is currentyl selected ... initialized to null (no user!))
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
+  //useState for any incremental progress for each user, in each of the 3 catgegories
   const [groupProgress, setGroupProgress] = useState([
     { username: 'Sandar', progress: { workout: 0, diet: 0, language: 0 } },
     { username: 'Will', progress: { workout: 0, diet: 0, language: 0 } },
     { username: 'Pete', progress: { workout: 0, diet: 0, language: 0 } },
   ]);
 
-  //interact with solopage ... update group progress state with info passed up
+  // handles progress for a specific user.
+  // if a username matches the username passed in, we update their progress
+  // otherwise ... keep the user the same (don't update anything)
 
-    const handleProgressUpdate = (username: string, updatedProgress: any) => {
-      setGroupProgress((prevProgress) =>
-        prevProgress.map((user) =>
-          user.username === username
-            ? { ...user, progress: updatedProgress }
-            : user
-        )
-      );
-    };
+  const handleProgressUpdate = (username: string, updatedProgress: any) => {
+    setGroupProgress((prevProgress) =>
+      prevProgress.map((user) =>
+        user.username === username
+          ? { ...user, progress: updatedProgress }
+          : user
+      )
+    );
+  };
 
-  //calc leaderboard
-  //   const leaderboard = groupProgress
-  //     .map((user) => ({
-  //       username: user.username,
-  //       total: calculateTotal(user.progress),
-  //     }))
-  //     .sort((a, b) => b.total - a.total);
+  // sort the leaderboard (for each user, calc the total progress and sort from high to low)
+  // groupProgress is unsorted list of Users. [...] makes a copy - don't mutate original.
+  // calculateTotal(b.progress) - calculateTotal(a.progress) --> means if b's total is bigger that a's... etc.
+  const sortedProgress = [...groupProgress].sort((a, b) => {
+    return calculateTotal(b.progress) - calculateTotal(a.progress);
+  });
 
+  // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected
   return (
-    <div style={{ padding: '20px' }}>
+    <div
+      style={{
+        padding: '20px',
+      }}
+    >
       {!selectedUser ? (
         <>
-          <h1>Group Trip - Goals Overview</h1>
+          <h2>Group Trip Page</h2>
+          <h3>Trip Id: pass it in here</h3>
           <h3>Trip Goals:</h3>
           <ul>
             <li>Workout: {tripGoals.workout} sessions</li>
@@ -53,28 +76,44 @@ const GroupTripPage: React.FC = () => {
             <li>Language: {tripGoals.language} lessons</li>
           </ul>
           <h2>Leaderboard</h2>
-          {groupProgress.map((user) => (
+          {sortedProgress.map((user) => (
+            //react requires key for el's in a loop, so used user.username as key
             <div key={user.username}>
               <button onClick={() => setSelectedUser(user.username)}>
-                {user.username}
+                {user.username} - Total: {calculateTotal(user.progress)}
               </button>
               <ul>
-                <li>Workout: {user.progress.workout} / {tripGoals.workout}</li>
-                <li>Diet: {user.progress.diet} / {tripGoals.diet}</li>
-                <li>Language: {user.progress.language} / {tripGoals.language}</li>
+                <li>
+                  Workout: {user.progress.workout} / {tripGoals.workout}
+                </li>
+                <li>
+                  Diet: {user.progress.diet} / {tripGoals.diet}
+                </li>
+                <li>
+                  Language: {user.progress.language} / {tripGoals.language}
+                </li>
               </ul>
             </div>
           ))}
         </>
       ) : (
         <>
-          <button onClick={() => setSelectedUser(null)}>Back to Group Page</button>
+          <button onClick={() => setSelectedUser(null)}>
+            Back to Group Page
+          </button>
           <SoloPage
+            //giving props username, progress, tripGoals, onProgressUpdate to child component
+            // ".?" --> if find() works, then .progress (display progress) ... ELSE display initial state
             username={selectedUser}
-            progress={groupProgress.find(user => user.username === selectedUser)?.progress || { workout: 0, diet: 0, language: 0 }}
-            tripGoals={tripGoals} 
-            onProgressUpdate={(updatedProgress) => 
-                handleProgressUpdate(selectedUser!, updatedProgress)
+            progress={
+              groupProgress.find((user) => user.username === selectedUser)
+                ?.progress || { workout: 0, diet: 0, language: 0 }
+            }
+            // selectedUser! --> ! is typescript telling SoloPage that selectedUser is not null. Tells React not to freak out.
+            // only way we'd get to this component anyway is if a user were selected by button.
+            tripGoals={tripGoals}
+            onProgressUpdate={(updatedProgress) =>
+              handleProgressUpdate(selectedUser!, updatedProgress)
             }
           />
         </>
