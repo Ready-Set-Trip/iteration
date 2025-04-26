@@ -1,0 +1,96 @@
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh;
+  width: 100vw; */
+  /* background: #fff; */
+}
+
+.logcontainer {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  background: rgb(150, 188, 43);
+  padding: 40px;
+  border-radius: 70px;
+}
+.logheader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 30px;
+  align-items: center;
+}
+.text {
+  color: black;
+  font-size: 50px;
+  font-weight: 600;
+}
+.underline {
+  width: 61px;
+  height: 7px;
+  background: black;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+.loginput-field {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.input {
+  display: flex;
+  margin: auto;
+  width: 480px;
+  height: 80px;
+  background: white;
+  border-radius: 5px;
+  align-items: center;
+}
+.input img {
+  margin: 0px 20px;
+}
+.input input {
+  height: 40px;
+  width: 400px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: grey;
+  font-size: 19px;
+}
+.forgot-password {
+  padding-left: 30px;
+  margin-top: 30px;
+  color: grey;
+  font-size: 18px;
+}
+.forgot-password span {
+  color: blue;
+  cursor: pointer;
+}
+.submit-container {
+  display: flex;
+  margin: 60px auto;
+  gap: 30px;
+}
+.submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 40px;
+  width: 150px;
+  height: 60px;
+  background: purple;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+.errordanger {
+  display: block;
+  font-size: 10px;
+  color: red;
+}
