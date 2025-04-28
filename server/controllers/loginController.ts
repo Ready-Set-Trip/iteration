@@ -1,6 +1,10 @@
 import bcrypt from 'bcrypt';
 import db from '../models/databaseModel';
 
+
+// TODO: add an optional field to enter trip ID, will automatically assign user to that trip
+// might have to change redirect options
+// unless we just want to handle this on the create/join trip page
 const loginController = {
   async verifyUser(req, res, next) {
     const { name, email, password } = req.body;

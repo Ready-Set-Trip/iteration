@@ -43,7 +43,7 @@ app.use(
 app.use('/login', loginRouters);
 app.use('/signup', signupRouters);
 app.use('/tripParameters', tripParametersRouters);
-app.use('/tripTemplate', tripsRouters);
+app.use('/trips', tripsRouters);
 
 // route handler to respond with main app
 

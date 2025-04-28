@@ -2,15 +2,17 @@
 // fetches trip for a logged in user GET
 // handle invites to a trip by adding a user to the trips table POST?
 
+// get fetch date?
+
 import express from 'express';
 
 import tripsController from '../controllers/tripsController';
 
 const router = express.Router();
 
-
-router.post('/', tripsController.createTrip, (req, res) => {
+router.post('/create', tripsController.createTrip, (req, res) => {
   res.status(201).json({ tripId: res.locals.tripId });
 });
+
 
 export default router;

@@ -32,7 +32,7 @@ const TripTemplate = () => {
       emails: emails.filter((email) => email.trim() !== ''),
     };
     try {
-      const response = await fetch('http://localhost:3000/tripTemplate', {
+      const response = await fetch('http://localhost:3000/trips/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
