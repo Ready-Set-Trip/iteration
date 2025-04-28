@@ -4,17 +4,13 @@
 
 import express from 'express';
 
-import variousController from '../controllers/signupController';
+import tripsController from '../controllers/tripsController';
 
 const router = express.Router();
-// root of this file is localhost:3000/trips/ (used to be /characters)
 
-// router.get('/:id', swapiController.getMoreCharacterData, (req, res) => {
-//   res.status(200).json({ gotCharacters: res.locals.moreCharacters });
-// });
 
-// router.post('/', characterController.createCharacter, fileController.saveCharacter, (req, res) => {
-//   res.status(200).json({ characters: res.locals.newCharacter });
-// });
+router.post('/', tripsController.createTrip, (req, res) => {
+  res.status(201).json({ tripId: res.locals.tripId });
+});
 
 export default router;
