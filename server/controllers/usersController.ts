@@ -5,15 +5,13 @@ interface UsersController {
   incrementHabit(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 const usersController: UsersController = {
-  // TODO: fix logic to increment habits (db.query needs to be written)
-  // work with Pete on how the request will be formed
   async incrementHabit(req, res, next) {
-    const { userId, habit } = req.params;
-    console.log(userId, habit)
+    const { user, habit } = req.params;
+    console.log(user, habit)
     try {
-      const result = await db.query('UPDATE users SET $1 = $1 + 1 WHERE user_id = $2 RETURNING $1', [habit, userId]);
-      res.locals.countAfterIncrement = result;
-      console.log('result', result)
+      const result = await db.query(`UPDATE users SET ${habit} = ${habit} + 1 WHERE id = $1 RETURNING ${habit}`, [user]);
+      res.locals.countAfterIncrement = Object.values(result.rows[0])[0];
+      console.log('countAfterIncrement', res.locals.countAfterIncrement)
       return next();
     } catch (error) {
       return next({
