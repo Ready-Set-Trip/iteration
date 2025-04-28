@@ -5,7 +5,6 @@
 // get fetch date?
 
 import express from 'express';
-
 import tripsController from '../controllers/tripsController';
 
 const router = express.Router();
@@ -14,5 +13,8 @@ router.post('/create', tripsController.createTrip, (req, res) => {
   res.status(201).json({ tripId: res.locals.tripId });
 });
 
+router.get('/groupStats/:tripId', tripsController.getGroupStats, (req, res) => {
+    res.status(200).json({ usersAndTrackers: res.locals.usersAndTrackers });
+})
 
 export default router;

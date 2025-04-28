@@ -17,6 +17,7 @@ import loginRouters from './routes/login';
 import signupRouters from './routes/signup';
 import tripParametersRouters from './routes/tripParameters';
 import tripsRouters from './routes/trips';
+import usersRouters from './routes/users'
 
 /**
  * handle parsing request body
@@ -44,6 +45,7 @@ app.use('/login', loginRouters);
 app.use('/signup', signupRouters);
 app.use('/tripParameters', tripParametersRouters);
 app.use('/trips', tripsRouters);
+app.use('/users', usersRouters)
 
 // route handler to respond with main app
 
