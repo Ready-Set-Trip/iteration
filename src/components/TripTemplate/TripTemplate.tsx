@@ -9,6 +9,7 @@ const TripTemplate = () => {
   const [tripName, setTripName] = useState('');
   const [emails, setEmails] = useState(['', '', '', '']);
   const [tripId, setTripId] = useState<string | null>(null);
+
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
   const handleTripnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +47,7 @@ const TripTemplate = () => {
       }
       const data = await response.json(); //recieved id from backend
       // console.log('Trip created and here's ur id:', data);
-      setTripId(data.id);
+      setTripId(data.tripId);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
