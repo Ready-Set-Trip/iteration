@@ -90,7 +90,11 @@ const TripTemplate = () => {
             Send Invite
           </button>
           <p>After you get the id, please go to Group Page</p>
-          <Link to='/grouptrippage' className='direct_to_grouppage'>
+          <Link
+            to='/grouptrippage'
+            state={{ tripId: `${tripId}` }}
+            className='direct_to_grouppage'
+          >
             Group Page
           </Link>
         </div>
