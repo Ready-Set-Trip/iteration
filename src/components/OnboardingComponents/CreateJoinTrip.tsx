@@ -26,7 +26,7 @@ const CreateJoinTrip = () => {
       if (!response.ok) {
         throw new Error('Trip ID not found');
       }
-      await response.json();
+
       navigate('/grouptrippage', { state: { tripId } });
     } catch (err) {
       console.error(err);

@@ -33,7 +33,7 @@ const TripTemplate = () => {
       emails: emails.filter((email) => email.trim() !== ''),
     };
     try {
-      const response = await fetch('http://localhost:3000/tripTemplate', {
+      const response = await fetch('http://localhost:3000/trips/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,8 +46,9 @@ const TripTemplate = () => {
         throw new Error(message);
       }
       const data = await response.json(); //recieved id from backend
-      // console.log('Trip created and here's ur id:', data);
+
       setTripId(data.tripId);
+      console.log("Trip created and here's ur id:", data.tripId);
     } catch (error) {
       console.error('Login error:', error);
       throw error;

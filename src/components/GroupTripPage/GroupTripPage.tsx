@@ -8,7 +8,8 @@
 //import things you need!
 import React, { useState } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
-
+import MessageBoard from './MessageBoard';
+import { useLocation } from 'react-router-dom';
 //LATER - figure out how to pass these numbers down and not hardcode ...
 const tripGoals = {
   workout: 20,
@@ -29,7 +30,8 @@ const calculateTotal = (progress: {
 const GroupTripPage: React.FC = () => {
   //useState for each user (keep track of which user is currentyl selected ... initialized to null (no user!))
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
-
+  const location = useLocation();
+  const { tripId } = location.state || {};
   //useState for any incremental progress for each user, in each of the 3 catgegories
   const [groupProgress, setGroupProgress] = useState([
     { username: 'Sandar', progress: { workout: 0, diet: 0, language: 0 } },
@@ -60,41 +62,66 @@ const GroupTripPage: React.FC = () => {
 
   // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected
   return (
-    <div
-      style={{
-        padding: '20px',
-      }}
-    >
+    <div style={{ padding: '20px' }}>
       {!selectedUser ? (
         <>
           <h2>Group Trip Page</h2>
-          <h3>Trip Id: pass it in here</h3>
+          <h3>Trip Id: pass it in here {tripId}</h3>
           <h3>Trip Goals:</h3>
           <ul>
-            <li>Workout: {tripGoals.workout} sessions</li>
-            <li>Diet: {tripGoals.diet} days of healthy eating</li>
-            <li>Language: {tripGoals.language} lessons</li>
+            Workout: {tripGoals.workout} sessions <strong>|</strong> Diet:{' '}
+            {tripGoals.diet} days of healthy eating <strong>|</strong> Language:{' '}
+            {tripGoals.language} lessons
           </ul>
-          <h2>Leaderboard</h2>
-          {sortedProgress.map((user) => (
-            //react requires key for el's in a loop, so used user.username as key
-            <div key={user.username}>
-              <button onClick={() => setSelectedUser(user.username)}>
-                {user.username} - Total: {calculateTotal(user.progress)}
-              </button>
-              <ul>
-                <li>
-                  Workout: {user.progress.workout} / {tripGoals.workout}
-                </li>
-                <li>
-                  Diet: {user.progress.diet} / {tripGoals.diet}
-                </li>
-                <li>
-                  Language: {user.progress.language} / {tripGoals.language}
-                </li>
-              </ul>
+
+          <div style={{ display: 'flex', gap: '40px' }}>
+            <div style={{ flex: 1 }}>
+              <h2>Leaderboard</h2>
+              {sortedProgress.map((user, index) => (
+                //react requires key for el's in a loop, so used user.username as key
+                <div key={user.username}>
+                  <button
+                    onClick={() => setSelectedUser(user.username)}
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: '18px',
+                      padding: '10px',
+                      backgroundColor:
+                        index === 0
+                          ? '#ffd700'
+                          : index === 1
+                          ? '#f2e8e8'
+                          : index === 2
+                          ? '#cd7f32'
+                          : '#f0f0f0',
+                      borderRadius: '8px',
+                      width: '100%',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    #{index + 1} - {user.username} - Total:{' '}
+                    {calculateTotal(user.progress)}
+                  </button>
+                  <ul>
+                    <li>
+                      Workout: {user.progress.workout} / {tripGoals.workout}
+                    </li>
+                    <li>
+                      Diet: {user.progress.diet} / {tripGoals.diet}
+                    </li>
+                    <li>
+                      Language: {user.progress.language} / {tripGoals.language}
+                    </li>
+                  </ul>
+                </div>
+              ))}
             </div>
-          ))}
+            <div style={{ flex: 1 }}>
+              <h2>Message Board</h2>
+              <MessageBoard />
+            </div>
+          </div>
         </>
       ) : (
         <>
