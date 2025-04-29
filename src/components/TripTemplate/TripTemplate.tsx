@@ -4,12 +4,12 @@
 import React from 'react';
 import './template.css';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const TripTemplate = () => {
   const [tripName, setTripName] = useState('');
   const [emails, setEmails] = useState(['', '', '', '']);
   const [tripId, setTripId] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
   const handleTripnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,13 @@ const TripTemplate = () => {
       throw error;
     }
   };
-
+  const handleClick = () => {
+    if (tripId) {
+      navigate('/grouptrippage', { state: { tripId } });
+    } else {
+      alert('Please create a trip first!');
+    }
+  };
   return (
     <div className='nametripcontainer'>
       <form className='form' onSubmit={handleSubmit}>
@@ -90,13 +96,13 @@ const TripTemplate = () => {
             Send Invite
           </button>
           <p>After you get the id, please go to Group Page</p>
-          <Link
-            to='/grouptrippage'
-            state={{ tripId: `${tripId}` }}
+          <button
+            type='button'
             className='direct_to_grouppage'
+            onClick={handleClick}
           >
             Group Page
-          </Link>
+          </button>
         </div>
       </form>
     </div>

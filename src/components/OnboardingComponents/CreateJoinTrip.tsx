@@ -10,7 +10,7 @@ import beach1_icon from '../../assets/beach1.jpg';
 import './CreateJoinTrip.css';
 
 const CreateJoinTrip = () => {
-  const [id, setId] = useState('');
+  const [tripId, setId] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -22,18 +22,18 @@ const CreateJoinTrip = () => {
   const handleClick = async () => {
     //check if the id exist or not, if it is exist navigate to grouptrip page
     try {
-      const response = await fetch(`/api/validate-id/${id}`);
-      const data = await response.json();
-      if (response.ok && data.id) {
-        navigate(`/GroupTripPage/${id}`);
-      } else {
-        setError('Invalid Trip ID');
+      const response = await fetch(`/trips/validate-id/${tripId.trim()}`);
+      if (!response.ok) {
+        throw new Error('Trip ID not found');
       }
+      await response.json();
+      navigate('/grouptrippage', { state: { tripId } });
     } catch (err) {
       console.error(err);
       setError('Something went wrong. Please try again later');
     }
   };
+
   return (
     <div className='boxcontainer'>
       <div className='background_pic'>
@@ -50,11 +50,16 @@ const CreateJoinTrip = () => {
         <input
           className='inputbox'
           type='text'
-          value={id}
+          value={tripId}
           onChange={handleChange}
           placeholder='Enter your id'
         />
-        <button className='clickmego' onClick={handleClick}>
+        <button
+          type='button'
+          className='clickmego'
+          onClick={handleClick}
+          disabled={tripId.trim() === ''}
+        >
           Go
         </button>
         {error && <p className='errormsg'>{error}</p>}
