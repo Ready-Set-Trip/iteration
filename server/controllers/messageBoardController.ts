@@ -6,6 +6,7 @@ interface MessageBoardController {
   getHistory(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
+// TODO write controller functions
 const messageBoardController: MessageBoardController = {
   async postMessage(req, res, next) {
     try {

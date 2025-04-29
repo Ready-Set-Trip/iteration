@@ -6,19 +6,33 @@
 // message board component pulled in here
 
 //import things you need!
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
 import MessageBoard from './MessageBoard';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 //LATER - figure out how to pass these numbers down and not hardcode ...
-const tripGoals = {
+
+type TripGoals = {
+  workout: number;
+  diet: number;
+  language: number;
+};
+
+const tripGoals: TripGoals = {
   workout: 20,
   diet: 15,
   language: 10,
 };
 
 //helper function for calculating total. also ts for progress.
-const calculateTotal = (progress: {
+const calculateTotal = (progress: Progress) => {
+  return progress.workout + progress.diet + progress.language;
+};
+
+// type definitions
+
+type Progress = {
   workout: number;
   diet: number;
   language: number;
@@ -149,12 +163,13 @@ const GroupTripPage: React.FC = () => {
     <div style={{ padding: '20px' }}>
       {!selectedUser ? (
         <>
-          <h2>Group Trip Page</h2>
-          <h3>Trip Id: pass it in here</h3>
+          <h2>Trip Name: </h2>
+          <h3>Trip Id: {tripId}</h3>
           <h3>Trip Goals:</h3>
           <ul>
-            Workout: {tripGoals.workout} sessions <strong>|</strong> Diet: {tripGoals.diet} days of healthy eating{' '}
-            <strong>|</strong> Language: {tripGoals.language} lessons
+            Workout: {tripGoals.workout} sessions <strong>|</strong> Diet:{' '}
+            {tripGoals.diet} days of healthy eating <strong>|</strong> Language:{' '}
+            {tripGoals.language} lessons
           </ul>
 
           <div style={{ display: 'flex', gap: '40px' }}>
@@ -170,7 +185,13 @@ const GroupTripPage: React.FC = () => {
                       fontSize: '18px',
                       padding: '10px',
                       backgroundColor:
-                        index === 0 ? '#ffd700' : index === 1 ? '#f2e8e8' : index === 2 ? '#cd7f32' : '#f0f0f0',
+                        index === 0
+                          ? '#ffd700'
+                          : index === 1
+                          ? '#f2e8e8'
+                          : index === 2
+                          ? '#cd7f32'
+                          : '#f0f0f0',
                       borderRadius: '8px',
                       width: '100%',
                       textAlign: 'left',
@@ -206,20 +227,33 @@ const GroupTripPage: React.FC = () => {
         </>
       ) : (
         <>
-          <button onClick={() => setSelectedUser(null)}>Back to Group Page</button>
+          <button onClick={() => setSelectedUser(null)}>
+            Back to Group Page
+          </button>
           <SoloPage
-            username={groupProgress.find((user) => user.id === selectedUser)?.username || ''}
+            username={
+              groupProgress.find((user) => user.id === selectedUser)
+                ?.username || ''
+            }
             progress={{
-              workout: groupProgress.find((user) => user.id === selectedUser)?.workout || 0,
-              diet: groupProgress.find((user) => user.id === selectedUser)?.diet || 0,
-              language: groupProgress.find((user) => user.id === selectedUser)?.language || 0,
+              workout:
+                groupProgress.find((user) => user.id === selectedUser)
+                  ?.workout || 0,
+              diet:
+                groupProgress.find((user) => user.id === selectedUser)
+                  ?.diet || 0,
+              language:
+                groupProgress.find((user) => user.id === selectedUser)
+                  ?.language || 0,
             }}
             tripGoals={{
               workout: tripGoals.workout,
               diet: tripGoals.diet,
               language: tripGoals.language,
             }}
-            onProgressUpdate={(habit: keyof ProgressState) => handleProgressUpdate(selectedUser!, habit)}
+            onProgressUpdate={(habit: keyof ProgressState,) =>
+              handleProgressUpdate(selectedUser!, habit)
+            }
           />
         </>
       )}
