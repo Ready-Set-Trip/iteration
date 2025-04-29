@@ -17,8 +17,7 @@ const loginController: LoginController = {
   async verifyUser(req, res, next) {
     const { email, password } = req.body;
     try {
-      console.log('trying to verifyUser');
-      const result = await db.query('SELECT password, name FROM users WHERE email = $1', [email]);
+      const result = await db.query('SELECT password, name, id, trip_id FROM users WHERE email = $1', [email]);
       // return 404 status if that Username isn't in the database
       if (result.rows.length === 0) {
         return next({
@@ -29,6 +28,8 @@ const loginController: LoginController = {
         });
       }
       res.locals.name = result.rows[0].name;
+      res.locals.userId = result.rows[0].id;
+      res.locals.tripId = result.rows[0].trip_id;
 
       // generate JWT
       // res.locals.token = jwt.sign(
@@ -39,7 +40,6 @@ const loginController: LoginController = {
 
       // checking password
       const storedPass = result.rows[0].password;
-      console.log('stored pass', storedPass);
       const passwordMatch = await bcrypt.compare(password, storedPass);
       if (passwordMatch) return next();
       else

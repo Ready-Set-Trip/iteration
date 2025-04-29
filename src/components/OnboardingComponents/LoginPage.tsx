@@ -51,7 +51,15 @@ const LoginPage = () => {
           throw new Error(message);
         }
         const data = await response.json();
-        navigate('/CreateJoinTrip');
+        const userId = data.userId;
+        const tripId = data.tripId;
+        console.log('data', data)
+        console.log('userId', userId)
+        console.log('tripId', tripId)
+        console.log('response', response)
+        // TODO: if user already part of a trip, go to trip page -- test and make sure this is working
+        if (tripId) navigate(`/GroupTripPage/${tripId}`)
+        navigate('/CreateJoinTrip', {state: { userId }});
         return data;
       } catch (error) {
         console.error('Login error:', error);
