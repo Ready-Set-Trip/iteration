@@ -4,10 +4,11 @@
 import React from 'react';
 import './template.css';
 import { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 const TripTemplate = () => {
   const [tripName, setTripName] = useState('');
   const [emails, setEmails] = useState(['', '', '', '']);
+  const [tripId, setTripId] = useState<string | null>(null);
 
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
@@ -46,7 +47,7 @@ const TripTemplate = () => {
       }
       const data = await response.json(); //recieved id from backend
       // console.log('Trip created and here's ur id:', data);
-      return data; //return the id // i am not sure do we need to return it?
+      setTripId(data.tripId);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -67,6 +68,12 @@ const TripTemplate = () => {
             required
           />
         </div>
+
+        {tripId && (
+          <div className='tripid'>
+            New Trip Created! Your Trip ID is:<strong>{tripId}</strong>
+          </div>
+        )}
         <div className='invitecontainer'>
           <label> Invite Your Friends</label>
           {emails.map((email, index) => (
@@ -82,6 +89,14 @@ const TripTemplate = () => {
           <button type='submit' className='invitebutton'>
             Send Invite
           </button>
+          <p>After you get the id, please go to Group Page</p>
+          <Link
+            to='/grouptrippage'
+            state={{ tripId: `${tripId}` }}
+            className='direct_to_grouppage'
+          >
+            Group Page
+          </Link>
         </div>
       </form>
     </div>
