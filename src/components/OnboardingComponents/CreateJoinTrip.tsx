@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import beach1_icon from '../../assets/beach1.jpg';
 import './CreateJoinTrip.css';
-
+console.log('hi');
 const CreateJoinTrip = () => {
   const [tripId, setId] = useState('');
   const [error, setError] = useState('');
