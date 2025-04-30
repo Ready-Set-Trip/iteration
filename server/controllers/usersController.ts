@@ -32,9 +32,9 @@ const usersController: UsersController = {
 
   async setUserTrip(req, res, next) {
     console.log('hi')
-    const { userId, tripId } = req.body;
-    console.log(`user: ${userId}, trip: ${tripId}`);
-    const tripTableId = decodeTripId(tripId);
+    const { userId, tempTripId } = req.body;
+    console.log(`user: ${userId}, trip: ${tempTripId}`);
+    const tripTableId = decodeTripId(tempTripId);
     try {
       const result = await db.query(`UPDATE users SET trip_id = $1 WHERE id = $2`, [tripTableId, userId])
       return next();

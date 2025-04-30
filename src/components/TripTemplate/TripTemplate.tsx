@@ -12,7 +12,11 @@ const TripTemplate = () => {
   const [tripId, setTripId] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = location.state?.userId;
+  const userId = location.state;
+  let tempTripId;
+  // console.log('initial user ID:', userId)
+  // console.log('initial trip ID:', tripId)
+
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
   const handleTripnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +53,7 @@ const TripTemplate = () => {
         throw new Error(message);
       }
       const data = await response.json(); //recieved id from backend
-
+      tempTripId = data.tripId;
       setTripId(data.tripId);
       console.log("Trip created and here's ur id:", data.tripId);
     } catch (error) {
@@ -57,13 +61,16 @@ const TripTemplate = () => {
       throw error;
     }
     // TODO use tripId and userId to add user to the trip on the backend
+    console.log('userId', userId)
+    console.log('tripId', tripId)
+    console.log('tempTripId', tempTripId)
     try {
       const response = await fetch('http://localhost:3000/users/setTrip', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, tripId }),
+        body: JSON.stringify({ userId, tempTripId }),
       });
 
       if (!response.ok) {
@@ -76,6 +83,7 @@ const TripTemplate = () => {
     }
   };
   const handleClick = () => {
+    console.log('trip ID inside handleClick before navigate', tripId)
     if (tripId) {
       navigate('/grouptrippage', { state: { tripId } });
     } else {

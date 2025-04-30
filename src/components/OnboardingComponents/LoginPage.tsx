@@ -8,6 +8,7 @@ import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
 import gshark from '../../assets/gshark.jpg';
 import { ValidateForm } from './LoginValidation';
+import { generateTripId, decodeTripId } from '../../../server/helperFuncs.ts';
 
 const LoginPage = () => {
   //set up first initial state of our login form,
@@ -17,9 +18,7 @@ const LoginPage = () => {
     password: '',
   });
   //also setError, either email or password should be string according to typescript
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const navigate = useNavigate();
   //we will handle data input by client,
@@ -54,13 +53,18 @@ const LoginPage = () => {
         const data = await response.json();
         const userId = data.userId;
         const tripId = data.tripId;
-        console.log('data', data)
-        console.log('userId', userId)
-        console.log('tripId', tripId)
-        console.log('response', response)
+        console.log('data', data);
+        console.log('userId', userId);
+        console.log('tripId', tripId);
+        console.log('response', response);
         // TODO: if user already part of a trip, go to trip page -- test and make sure this is working
-        if (tripId) navigate(`/GroupTripPage/${tripId}`)
-        navigate('/CreateJoinTrip', {state: { userId }});
+        if (tripId) {
+          console.log('about to navigate straight from login to group trip page', tripId);
+          const encodedId = generateTripId(tripId)
+          navigate(`/GroupTripPage/${encodedId}`);
+        } else {
+          navigate('/CreateJoinTrip', { state: { userId } });
+        }
         return data;
       } catch (error) {
         console.error('Login error:', error);
@@ -82,30 +86,14 @@ const LoginPage = () => {
           <div className='loginput-field'>
             <div className='input'>
               <img src={email_icon} alt='emailIcon' />
-              <input
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
-                onChange={handleInput}
-              />
-              {errors.email && (
-                <span className='errordanger'>{errors.email}</span>
-              )}
+              <input type='email' name='email' id='email' placeholder='Email' onChange={handleInput} />
+              {errors.email && <span className='errordanger'>{errors.email}</span>}
             </div>
 
             <div className='input'>
               <img src={password_icon} alt='passwordIcon' />
-              <input
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
-                onChange={handleInput}
-              />
-              {errors.password && (
-                <span className='errordanger'>{errors.password}</span>
-              )}
+              <input type='password' name='password' id='password' placeholder='Password' onChange={handleInput} />
+              {errors.password && <span className='errordanger'>{errors.password}</span>}
             </div>
           </div>
           <div className='forgot-password'>
