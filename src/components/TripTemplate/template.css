@@ -43,17 +43,22 @@
 .tripid {
   gap: 20px;
   font-size: 18px;
+  margin-bottom: 20px;
+  padding: 3px 20px;
 }
 .direct_to_grouppage {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 20px;
-  width: 150px;
+  width: 170px;
   height: 30px;
   background: purple;
   color: white;
   font-size: 20px;
   cursor: pointer;
   margin-top: 30px;
+}
+.bold {
+  font-size: 22px;
 }

@@ -8,6 +8,7 @@ import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
 import { useState } from 'react';
 import { ValidateFormForSignUp } from './SignUpValidation';
+import gshark from '../../assets/gshark.jpg';
 
 const SignUp = () => {
   //set up first initial state of our login form,
@@ -65,6 +66,7 @@ const SignUp = () => {
 
   return (
     <div className='page-wrapper'>
+      <img src={gshark} className='gshark' />
       <div className='container'>
         <form action='' onSubmit={handleSubmit}>
           <div className='header'>

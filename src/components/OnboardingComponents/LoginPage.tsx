@@ -6,7 +6,7 @@ import { useState } from 'react';
 import './LoginPage.css';
 import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
-
+import gshark from '../../assets/gshark.jpg';
 import { ValidateForm } from './LoginValidation';
 
 const LoginPage = () => {
@@ -20,6 +20,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+
   const navigate = useNavigate();
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
@@ -70,6 +71,7 @@ const LoginPage = () => {
 
   return (
     <div className='page-wrapper'>
+      <img src={gshark} className='gshark' />
       <div className='logcontainer'>
         <form action='' onSubmit={handleSubmit}>
           <div className='logheader'>

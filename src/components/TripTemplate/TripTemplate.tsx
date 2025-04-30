@@ -99,7 +99,8 @@ const TripTemplate = () => {
 
         {tripId && (
           <div className='tripid'>
-            New Trip Created! Your Trip ID is:<strong>{tripId}</strong>
+            New Trip Created! Your Trip ID is:
+            <strong className='bold'>{tripId}</strong>
           </div>
         )}
         <div className='invitecontainer'>
@@ -117,7 +118,7 @@ const TripTemplate = () => {
           <button type='submit' className='invitebutton'>
             Send Invite
           </button>
-          <p>After you get the id, please go to Group Page</p>
+          <h5>After you get the id, please go to Group Page</h5>
           <button
             type='button'
             className='direct_to_grouppage'
