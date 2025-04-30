@@ -4,12 +4,15 @@
 import React from 'react';
 import './template.css';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 const TripTemplate = () => {
   const [tripName, setTripName] = useState('');
   const [emails, setEmails] = useState(['', '', '', '']);
   const [tripId, setTripId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const userId = location.state?.userId;
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
   const handleTripnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +53,25 @@ const TripTemplate = () => {
       setTripId(data.tripId);
       console.log("Trip created and here's ur id:", data.tripId);
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Create trip:', error);
+      throw error;
+    }
+    // TODO use tripId and userId to add user to the trip on the backend
+    try {
+      const response = await fetch('http://localhost:3000/users/setTrip', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, tripId }),
+      });
+
+      if (!response.ok) {
+        const message = `Error: ${response.status}`;
+        throw new Error(message);
+      }
+    } catch (error) {
+      console.error('Error setting newly created trip on user:', error);
       throw error;
     }
   };

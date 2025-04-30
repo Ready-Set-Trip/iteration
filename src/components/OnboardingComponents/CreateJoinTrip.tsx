@@ -62,7 +62,7 @@ const CreateJoinTrip = () => {
       </div>
       <div className='createboxcontainer'>
         <div className='createbox'>Create a trip?</div>
-        <Link to='/TripTemplate' className='clickme'>
+        <Link to='/TripTemplate' state={userId} className='clickme'>
           Click Here
         </Link>
       </div>
