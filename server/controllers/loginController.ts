@@ -21,7 +21,7 @@ const loginController: LoginController = {
       // return 404 status if that Username isn't in the database
       if (result.rows.length === 0) {
         return next({
-          // TODO: fix logs/messages to obfuscate whether user or pass is wrong
+          // TODO: fix logs/messages to obfuscate whether user or pass is wrong 
           log: 'verifyUser: username not found',
           status: 404,
           message: { err: 'Username not found' },
