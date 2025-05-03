@@ -3,9 +3,7 @@
 // also include banner (pull in from props)
 
 import React from 'react';
-import WorkoutTracker from './WorkoutTracker';
-import DietTracker from './DietTracker';
-import LangTracker from './LangTracker';
+import Tracker from './Tracker';
 
 // typescript define types of internal state
 interface ProgressState {
@@ -42,18 +40,20 @@ const SoloPage: React.FC<SoloPageProps> = ({
     <div style={{ textAlign: 'center' }}>
       <h2> {username}'s Current Status</h2>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-        <WorkoutTracker
-          //passes 3 props to tracker
+        <Tracker
+          habit='workout'
           value={progress.workout}
           goal={tripGoals.workout}
           onIncrement={() => handleIncrement('workout')}
         />
-        <DietTracker
+        <Tracker
+          habit='diet'
           value={progress.diet}
           goal={tripGoals.diet}
           onIncrement={() => handleIncrement('diet')}
         />
-        <LangTracker
+        <Tracker
+          habit='language'
           value={progress.language}
           goal={tripGoals.language}
           onIncrement={() => handleIncrement('language')}

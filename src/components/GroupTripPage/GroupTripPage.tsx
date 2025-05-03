@@ -5,14 +5,15 @@
 // pass down banner w/ top leader(s) & countdown
 // message board component pulled in here
 
-//import things you need!
 import React, { useState, useEffect } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
 import MessageBoard from './MessageBoard';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-//LATER - figure out how to pass these numbers down and not hardcode ...
-
+// TODO: change the type (or make it an interface?)
+// need to have a variable number of habits
+// need to have strings for the habit names
+// the resulting type may be a different structure. We need like a variable length object
 type TripGoals = {
   workout: number;
   diet: number;
@@ -25,13 +26,6 @@ const tripGoals: TripGoals = {
   language: 10,
 };
 
-//helper function for calculating total. also ts for progress.
-const calculateTotal = (progress: Progress) => {
-  return progress.workout + progress.diet + progress.language;
-};
-
-// type definitions
-
 type Progress = {
   workout: number;
   diet: number;
@@ -41,9 +35,11 @@ type Progress = {
 type UserProgress = {
   username: string;
   id: string;
-  workout: number;
-  diet: number;
-  language: number;
+  progress: Progress;
+};
+
+const calculateTotal = (progress: Progress) => {
+  return Object.values(progress).reduce((sum, value) => sum + value, 0);
 };
 
 //define page's react componenet
@@ -58,8 +54,6 @@ const GroupTripPage: React.FC = () => {
     tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
   }
 
-  console.log('tripId inside GroupTripPage', tripId);
-
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [groupProgress, setGroupProgress] = useState<UserProgress[]>([]);
 
@@ -71,6 +65,8 @@ const GroupTripPage: React.FC = () => {
       navigate('/');
       return;
     }
+    // TODO: need to also fetch array of trackers (habits)
+    // so that we pass down this array to Solo Page
     const fetchGroupStats = async () => {
       try {
         const res = await fetch(`http://localhost:3000/trips/groupStats/${tripId}`);
@@ -84,9 +80,11 @@ const GroupTripPage: React.FC = () => {
         const adjustProgress = data.usersAndTrackers.map((user: any) => ({
           username: user.name,
           id: user.id,
-          workout: user.workout_count,
-          diet: user.diet_count,
-          language: user.language_count,
+          progress: {
+            workout: user.workout_count,
+            diet: user.diet_count,
+            language: user.language_count,
+          },
         }));
         setGroupProgress(adjustProgress);
         console.log('adjustProgress', adjustProgress);
@@ -97,15 +95,15 @@ const GroupTripPage: React.FC = () => {
     };
 
     fetchGroupStats();
-  }, [tripId, navigate]);
+  }, [tripId, navigate, groupProgress]);
 
+  // TODO: I think the below 3 lines of code were Pete's and haven't been implemented yet. Will need to use JWTs?
   // handles progress for a specific user.
   // if a username matches the username passed in, we update their progress
   // otherwise ... keep the user the same (don't update anything)
 
   const handleProgressUpdate = async (userId: string, habitObj: { [key: string]: number }, updatedValue: number) => {
     // why is the only thing console.logging habitObj?
-    console.log('hi');
     console.log('userId', userId);
     console.log('habitObj: ', habitObj); // why does only this one work???
     console.log('habit obj keys', Object.keys(habitObj));
@@ -150,23 +148,12 @@ const GroupTripPage: React.FC = () => {
   // groupProgress is unsorted list of Users. [...] makes a copy - don't mutate original.
   // calculateTotal(b.progress) - calculateTotal(a.progress) --> means if b's total is bigger that a's... etc.
   const sortedProgress = [...groupProgress].sort((a, b) => {
-    return (
-      calculateTotal({
-        workout: b.workout,
-        diet: b.diet,
-        language: b.language,
-      }) -
-      calculateTotal({
-        workout: a.workout,
-        diet: a.diet,
-        language: a.language,
-      })
-    );
+    return calculateTotal(b.progress) - calculateTotal(a.progress)
   });
 
   // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px'}}>
       {!selectedUser ? (
         <>
           <h2>Trip Name: </h2>
@@ -186,6 +173,7 @@ const GroupTripPage: React.FC = () => {
                   <button
                     onClick={() => setSelectedUser(user.username)}
                     style={{
+                      color:'black',
                       fontWeight: 'bold',
                       fontSize: '18px',
                       padding: '10px',
@@ -198,21 +186,17 @@ const GroupTripPage: React.FC = () => {
                     }}
                   >
                     #{index + 1} - {user.username} - Total:{' '}
-                    {calculateTotal({
-                      workout: user.workout,
-                      diet: user.diet,
-                      language: user.language,
-                    })}
+                    {calculateTotal(user.progress)}
                   </button>
                   <ul>
                     <li>
-                      Workout: {user.workout} / {tripGoals.workout}
+                      Workout: {user.progress.workout} / {tripGoals.workout}
                     </li>
                     <li>
-                      Diet: {user.diet} / {tripGoals.diet}
+                      Diet: {user.progress.diet} / {tripGoals.diet}
                     </li>
                     <li>
-                      Language: {user.language} / {tripGoals.language}
+                      Language: {user.progress.language} / {tripGoals.language}
                     </li>
                   </ul>
                 </div>
@@ -230,9 +214,9 @@ const GroupTripPage: React.FC = () => {
           <SoloPage
             username={groupProgress.find((user) => user.id === selectedUser)?.username || ''}
             progress={{
-              workout: groupProgress.find((user) => user.id === selectedUser)?.workout || 0,
-              diet: groupProgress.find((user) => user.id === selectedUser)?.diet || 0,
-              language: groupProgress.find((user) => user.id === selectedUser)?.language || 0,
+              workout: groupProgress.find((user) => user.id === selectedUser)?.progress.workout || 0,
+              diet: groupProgress.find((user) => user.id === selectedUser)?.progress.diet || 0,
+              language: groupProgress.find((user) => user.id === selectedUser)?.progress.language || 0,
             }}
             tripGoals={{
               workout: tripGoals.workout,
