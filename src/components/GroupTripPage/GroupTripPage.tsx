@@ -14,13 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // need to have a variable number of habits
 // need to have strings for the habit names
 // the resulting type may be a different structure. We need like a variable length object
-type TripGoals = {
-  workout: number;
-  diet: number;
-  language: number;
-};
-
-const tripGoals: TripGoals = {
+const tripGoals: Progress = {
   workout: 20,
   diet: 15,
   language: 10,
@@ -33,7 +27,7 @@ type Progress = {
 };
 
 type UserProgress = {
-  username: string;
+  name: string;
   id: string;
   progress: Progress;
 };
@@ -57,6 +51,8 @@ const GroupTripPage: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [groupProgress, setGroupProgress] = useState<UserProgress[]>([]);
 
+  
+
   // const [groupStats, setGroupStats] = useState(null);
 
   useEffect(() => {
@@ -78,7 +74,7 @@ const GroupTripPage: React.FC = () => {
         console.log('data:', data);
 
         const adjustProgress = data.usersAndTrackers.map((user: any) => ({
-          username: user.name,
+          name: user.name,
           id: user.id,
           progress: {
             workout: user.workout_count,
@@ -95,23 +91,16 @@ const GroupTripPage: React.FC = () => {
     };
 
     fetchGroupStats();
-  }, [tripId, navigate, groupProgress]);
+  }, [tripId, navigate]);
 
   // TODO: I think the below 3 lines of code were Pete's and haven't been implemented yet. Will need to use JWTs?
   // handles progress for a specific user.
   // if a username matches the username passed in, we update their progress
   // otherwise ... keep the user the same (don't update anything)
 
-  const handleProgressUpdate = async (userId: string, habitObj: { [key: string]: number }, updatedValue: number) => {
-    // why is the only thing console.logging habitObj?
-    console.log('userId', userId);
-    console.log('habitObj: ', habitObj); // why does only this one work???
-    console.log('habit obj keys', Object.keys(habitObj));
-    let habit: string = '';
-    if (habitObj.workout === 1) habit = 'workout';
-    else if (habitObj.diet === 1) habit = 'diet';
-    else if (habitObj.language === 1) habit = 'language';
-    console.log('habit', habit);
+  const handleProgressUpdate = async (userId: string, habit: string ) => {
+    console.log('userId CHECK UNDEFINIDED', userId);
+    console.log('habit', habit)
 
     try {
       const res = await fetch(`http://localhost:3000/users/${userId}/${habit}`, {
@@ -119,7 +108,7 @@ const GroupTripPage: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ updatedValue }),
+        body: JSON.stringify({userId, habit})
       });
 
       if (!res.ok) {
@@ -148,12 +137,12 @@ const GroupTripPage: React.FC = () => {
   // groupProgress is unsorted list of Users. [...] makes a copy - don't mutate original.
   // calculateTotal(b.progress) - calculateTotal(a.progress) --> means if b's total is bigger that a's... etc.
   const sortedProgress = [...groupProgress].sort((a, b) => {
-    return calculateTotal(b.progress) - calculateTotal(a.progress)
+    return calculateTotal(b.progress) - calculateTotal(a.progress);
   });
-
-  // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected
+  
+  // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected (the SoloPage)
   return (
-    <div style={{ padding: '20px'}}>
+    <div style={{ padding: '20px' }}>
       {!selectedUser ? (
         <>
           <h2>Trip Name: </h2>
@@ -169,11 +158,11 @@ const GroupTripPage: React.FC = () => {
               <h2>Leaderboard</h2>
               {sortedProgress.map((user, index) => (
                 //react requires key for el's in a loop, so used user.username as key
-                <div key={user.username}>
+                <div key={user.name}>
                   <button
-                    onClick={() => setSelectedUser(user.username)}
+                    onClick={() => setSelectedUser(user.id)}
                     style={{
-                      color:'black',
+                      color: 'black',
                       fontWeight: 'bold',
                       fontSize: '18px',
                       padding: '10px',
@@ -185,8 +174,7 @@ const GroupTripPage: React.FC = () => {
                       cursor: 'pointer',
                     }}
                   >
-                    #{index + 1} - {user.username} - Total:{' '}
-                    {calculateTotal(user.progress)}
+                    #{index + 1} - {user.name} - Total: {calculateTotal(user.progress)}
                   </button>
                   <ul>
                     <li>
@@ -211,8 +199,10 @@ const GroupTripPage: React.FC = () => {
       ) : (
         <>
           <button onClick={() => setSelectedUser(null)}>Back to Group Page</button>
+
           <SoloPage
-            username={groupProgress.find((user) => user.id === selectedUser)?.username || ''}
+            userId = {selectedUser}
+            username={groupProgress.find((user) => user.id === selectedUser)?.name || ''}
             progress={{
               workout: groupProgress.find((user) => user.id === selectedUser)?.progress.workout || 0,
               diet: groupProgress.find((user) => user.id === selectedUser)?.progress.diet || 0,
@@ -223,7 +213,7 @@ const GroupTripPage: React.FC = () => {
               diet: tripGoals.diet,
               language: tripGoals.language,
             }}
-            onProgressUpdate={(habit: keyof ProgressState) => handleProgressUpdate(selectedUser!, habit)}
+            onProgressUpdate={(id, habit) => handleProgressUpdate(id, habit)}
           />
         </>
       )}

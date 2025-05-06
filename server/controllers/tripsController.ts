@@ -2,8 +2,6 @@ import db from '../models/databaseModel';
 import { Request, Response, NextFunction } from 'express';
 import { generateTripId, decodeTripId } from '../helperFuncs';
 
-
-
 interface TripsController {
   createTrip(req: Request, res: Response, next: NextFunction): Promise<void>;
   getGroupStats(req: Request, res: Response, next: NextFunction): Promise<void>;
@@ -33,16 +31,14 @@ const tripsController: TripsController = {
 
   async getGroupStats(req, res, next) {
     const { tripId } = req.params;
-    console.log('tripId', tripId);
     const tripTableId = decodeTripId(tripId);
-    console.log('tripTableId', tripTableId);
     try {
       // TODO: should we return the unique user ID instead of email for unique identifier?
       const result = await db.query(
         'SELECT name, id, workout_count, diet_count, language_count FROM users WHERE trip_id = $1',
         [tripTableId]
       );
-      console.log('result.rows: ', result.rows);
+      // console.log('result.rows: ', result.rows);
       res.locals.usersAndTrackers = result.rows;
       return next();
     } catch (error) {
