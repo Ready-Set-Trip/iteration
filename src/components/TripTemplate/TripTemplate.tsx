@@ -61,9 +61,9 @@ const TripTemplate = () => {
       throw error;
     }
     // TODO use tripId and userId to add user to the trip on the backend
-    console.log('userId', userId)
-    console.log('tripId', tripId)
-    console.log('tempTripId', tempTripId)
+    console.log('userId', userId);
+    console.log('tripId', tripId);
+    console.log('tempTripId', tempTripId);
     try {
       const response = await fetch('http://localhost:3000/users/setTrip', {
         method: 'PATCH',
@@ -83,7 +83,7 @@ const TripTemplate = () => {
     }
   };
   const handleClick = () => {
-    console.log('trip ID inside handleClick before navigate', tripId)
+    console.log('trip ID inside handleClick before navigate', tripId);
     if (tripId) {
       navigate('/grouptrippage', { state: { tripId } });
     } else {
@@ -91,42 +91,98 @@ const TripTemplate = () => {
     }
   };
   return (
-    <div className='nametripcontainer'>
-      <form className='form' onSubmit={handleSubmit}>
-        <div className='tripname'>
-          <label>Name Your Trip</label>
-          <input
-            className='tripnamebox'
-            type='text'
-            placeholder='Enter your trip name'
-            value={tripName}
-            onChange={handleTripnameChange}
-            required
-          />
-        </div>
+    //commented out code is the original code
+    // <div className='nametripcontainer'>
+    //   <form className='form' onSubmit={handleSubmit}>
+    //     <div className='tripname'>
+    //       <label>Name Your Trip</label>
+    //       <input
+    //         className='tripnamebox'
+    //         type='text'
+    //         placeholder='Enter your trip name'
+    //         value={tripName}
+    //         onChange={handleTripnameChange}
+    //         required
+    //       />
+    //     </div>
 
-        {tripId && (
-          <div className='tripid'>
-            New Trip Created! Your Trip ID is:
-            <strong className='bold'>{tripId}</strong>
-          </div>
-        )}
-        <div className='invitecontainer'>
-          <label> Invite Your Friends</label>
-          {emails.map((email, index) => (
+    //     {tripId && (
+    //       <div className='tripid'>
+    //         New Trip Created! Your Trip ID is:
+    //         <strong className='bold'>{tripId}</strong>
+    //       </div>
+    //     )}
+    //     <div className='invitecontainer'>
+    //       <label> Invite Your Friends</label>
+    //       {emails.map((email, index) => (
+    //         <input
+    //           className='inputbox'
+    //           key={index}
+    //           type='email'
+    //           placeholder='Enter email'
+    //           value={email}
+    //           onChange={(e) => handleEmail(index, e)}
+    //         />
+    //       ))}
+    //       <button type='submit' className='invitebutton'>
+    //         Send Invite
+    //       </button>
+    //       <h5>After you get the id, please go to Group Page</h5>
+    //       <button
+    //         type='button'
+    //         className='direct_to_grouppage'
+    //         onClick={handleClick}
+    //       >
+    //         Group Page
+    //       </button>
+    //     </div>
+    //   </form>
+    // </div>
+    <div className='nametripcontainer'>
+      {!tripId && (
+        <form className='form' onSubmit={handleSubmit}>
+          <div className='tripname'>
+            <label>Name Your Trip</label>
             <input
-              className='inputbox'
-              key={index}
-              type='email'
-              placeholder='Enter email'
-              value={email}
-              onChange={(e) => handleEmail(index, e)}
+              className='tripnamebox'
+              type='text'
+              placeholder='Enter your trip name'
+              value={tripName}
+              onChange={handleTripnameChange}
+              required
             />
-          ))}
-          <button type='submit' className='invitebutton'>
-            Send Invite
-          </button>
-          <h5>After you get the id, please go to Group Page</h5>
+          </div>
+          <div className='invitecontainer'>
+            <label> Invite Your Friends</label>
+            {emails.map((email, index) => (
+              <input
+                className='inputbox'
+                key={index}
+                type='email'
+                placeholder='Enter email'
+                value={email}
+                onChange={(e) => handleEmail(index, e)}
+              />
+            ))}
+            <button type='submit' className='invitebutton'>
+              Send Invite
+            </button>
+            <h5>After you get the id, please go to Group Page</h5>
+            <button
+              type='button'
+              className='direct_to_grouppage'
+              onClick={handleClick}
+            >
+              Group Page
+            </button>
+          </div>
+        </form>
+      )}
+      {tripId && (
+        <div className='tripid'>
+          New Trip Created! Your Trip ID is:
+          <strong className='bold'>{tripId}</strong>
+          <h5>Please go to Group Page</h5>
           <button
             type='button'
             className='direct_to_grouppage'
@@ -135,7 +191,7 @@ const TripTemplate = () => {
             Group Page
           </button>
         </div>
-      </form>
+      )}
     </div>
   );
 };

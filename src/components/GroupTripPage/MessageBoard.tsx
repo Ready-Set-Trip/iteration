@@ -1,38 +1,65 @@
-// set up message board form here
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Message {
   id: number;
-  author: string;
-  text: string;
+  name: string;
+  message: string;
+  created_at?: string;
 }
 
 const MessageBoard: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 0, author: 'TripLeader', text: 'Here we gooo!' },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [newAuthor, setNewAuthor] = useState('');
+  const [newName, setNewName] = useState('');
 
-  const handleInputChangeAuthor = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewAuthor(e.target.value);
+  // Load messages on component mount
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/messageBoard');
+      if (!response.ok) throw new Error('Failed to fetch messages');
+      const data = await response.json();
+      setMessages(data.messages.reverse());
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
   };
 
-  const handleInputChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewName(e.target.value);
+  };
+
+  const handleInputChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
   };
 
-  const handlePostMessage = () => {
-    if (newMessage.trim() !== '' && newAuthor.trim() !== '') {
-      const newMessageToAdd: Message = {
-        id: messages.length + 1,
-        author: newAuthor,
-        text: newMessage,
-      };
-      setMessages([newMessageToAdd, ...messages]);
+  const handlePostMessage = async () => {
+    if (newMessage.trim() === '' || newName.trim() === '') return;
+
+    try {
+      const response = await fetch('http://localhost:3000/messageBoard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newName,
+          message: newMessage
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to post message');
+      
+      const result = await response.json();
+      // Add the new message to the beginning of the messages array
+      setMessages([result.message, ...messages]);
       setNewMessage('');
-      setNewAuthor('');
+      setNewName('');
+    } catch (error) {
+      console.error('Error posting message:', error);
     }
   };
 
@@ -51,7 +78,7 @@ const MessageBoard: React.FC = () => {
           {messages.map((message) => (
             <div key={message.id}>
               <p>
-                <strong>{message.author}</strong>: {message.text}
+                <strong>{message.name}</strong>: {message.message}
               </p>
             </div>
           ))}
@@ -59,8 +86,8 @@ const MessageBoard: React.FC = () => {
         <input
           type='text'
           placeholder='Your Name'
-          value={newAuthor}
-          onChange={handleInputChangeAuthor}
+          value={newName}
+          onChange={handleInputChangeName}
           style={{ width: '300px' }}
         />
         <div style={{ height: '5px' }} />
@@ -68,7 +95,7 @@ const MessageBoard: React.FC = () => {
           rows={3}
           placeholder='Message Here'
           value={newMessage}
-          onChange={handleInputChangeText}ç
+          onChange={handleInputChangeText}
           style={{ width: '300px' }}
         />
         <br />
