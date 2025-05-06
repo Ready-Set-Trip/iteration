@@ -17,7 +17,6 @@ function App() {
       <Route path='/signup' element={<SignUp />} />
       <Route path='/createJoinTrip' element={<CreateJoinTrip />} />
       <Route path='/tripTemplate' element={<TripTemplate />} />
-      <Route path='/solopage' element={<SoloPage />} />
       <Route path='/grouptrippage/*' element={<GroupTripPage />} />
     </Routes>
   );

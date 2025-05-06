@@ -16,9 +16,7 @@ export const generateTripId = (tableId: number): string => {
   };
   
 export const decodeTripId = (tripCode: string): number => {
-  console.log('tripcode', tripCode)
     const numbersPart = parseInt(tripCode.slice(1));
-    console.log('numberspart', numbersPart)
     const decodedId = (numbersPart - 841) / 13;
     return decodedId;
   };
