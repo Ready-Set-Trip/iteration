@@ -26,9 +26,9 @@ type Progress = {
   language: number;
 };
 
-type UserProgress = {
+type UserInfo = {
   name: string;
-  id: string;
+  id: number;
   progress: Progress;
 };
 
@@ -48,12 +48,8 @@ const GroupTripPage: React.FC = () => {
     tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
   }
 
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [groupProgress, setGroupProgress] = useState<UserProgress[]>([]);
-
-  
-
-  // const [groupStats, setGroupStats] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
+  const [groupInfo, setGroupInfo] = useState<UserInfo[]>([]);
 
   useEffect(() => {
     if (!tripId) {
@@ -82,7 +78,7 @@ const GroupTripPage: React.FC = () => {
             language: user.language_count,
           },
         }));
-        setGroupProgress(adjustProgress);
+        setGroupInfo(adjustProgress);
         console.log('adjustProgress', adjustProgress);
         // setGroupStats(data);
       } catch (error) {
@@ -98,17 +94,14 @@ const GroupTripPage: React.FC = () => {
   // if a username matches the username passed in, we update their progress
   // otherwise ... keep the user the same (don't update anything)
 
-  const handleProgressUpdate = async (userId: string, habit: string ) => {
-    console.log('userId CHECK UNDEFINIDED', userId);
-    console.log('habit', habit)
-
+  const handleProgressUpdate = async (userId: number, habit: string) => {
     try {
       const res = await fetch(`http://localhost:3000/users/${userId}/${habit}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({userId, habit})
+        body: JSON.stringify({ userId, habit }),
       });
 
       if (!res.ok) {
@@ -118,15 +111,8 @@ const GroupTripPage: React.FC = () => {
       const data = await res.json(); // your backend returns { countAfterIncrement: newCount }
       console.log('PATCH response:', data);
 
-      setGroupProgress((prevProgress) =>
-        prevProgress.map((user) =>
-          user.id === userId
-            ? {
-                ...user,
-                [habit]: data.countAfterIncrement,
-              }
-            : user
-        )
+      setGroupInfo((prevProgress) =>
+        prevProgress.map((user) => (user.id === userId ? { ...user, [habit]: data.countAfterIncrement } : user))
       );
     } catch (err) {
       console.log('Error updating progress', err);
@@ -134,12 +120,12 @@ const GroupTripPage: React.FC = () => {
   };
 
   // sort the leaderboard (for each user, calc the total progress and sort from high to low)
-  // groupProgress is unsorted list of Users. [...] makes a copy - don't mutate original.
+  // groupInfo is unsorted list of Users. [...] makes a copy - don't mutate original.
   // calculateTotal(b.progress) - calculateTotal(a.progress) --> means if b's total is bigger that a's... etc.
-  const sortedProgress = [...groupProgress].sort((a, b) => {
+  const sortedProgress = [...groupInfo].sort((a, b) => {
     return calculateTotal(b.progress) - calculateTotal(a.progress);
   });
-  
+
   // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected (the SoloPage)
   return (
     <div style={{ padding: '20px' }}>
@@ -157,10 +143,10 @@ const GroupTripPage: React.FC = () => {
             <div style={{ flex: 1 }}>
               <h2>Leaderboard</h2>
               {sortedProgress.map((user, index) => (
-                //react requires key for el's in a loop, so used user.username as key
+                //react requires key for el's in a loop, so used user.name as key
                 <div key={user.name}>
                   <button
-                    onClick={() => setSelectedUser(user.id)}
+                    onClick={() => setSelectedUser(user)}
                     style={{
                       color: 'black',
                       fontWeight: 'bold',
@@ -201,18 +187,10 @@ const GroupTripPage: React.FC = () => {
           <button onClick={() => setSelectedUser(null)}>Back to Group Page</button>
 
           <SoloPage
-            userId = {selectedUser}
-            username={groupProgress.find((user) => user.id === selectedUser)?.name || ''}
-            progress={{
-              workout: groupProgress.find((user) => user.id === selectedUser)?.progress.workout || 0,
-              diet: groupProgress.find((user) => user.id === selectedUser)?.progress.diet || 0,
-              language: groupProgress.find((user) => user.id === selectedUser)?.progress.language || 0,
-            }}
-            tripGoals={{
-              workout: tripGoals.workout,
-              diet: tripGoals.diet,
-              language: tripGoals.language,
-            }}
+            userId={selectedUser.id}
+            name={selectedUser.name}
+            progress={selectedUser.progress}
+            tripGoals={tripGoals}
             onProgressUpdate={(id, habit) => handleProgressUpdate(id, habit)}
           />
         </>
