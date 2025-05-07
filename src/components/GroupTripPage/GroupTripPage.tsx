@@ -48,7 +48,7 @@ const GroupTripPage: React.FC = () => {
     tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
   }
 
-  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [groupInfo, setGroupInfo] = useState<UserInfo[]>([]);
 
   useEffect(() => {
@@ -57,8 +57,7 @@ const GroupTripPage: React.FC = () => {
       navigate('/');
       return;
     }
-    // TODO: need to also fetch array of trackers (habits)
-    // so that we pass down this array to Solo Page
+
     const fetchGroupStats = async () => {
       try {
         const res = await fetch(`http://localhost:3000/trips/groupStats/${tripId}`);
@@ -69,7 +68,8 @@ const GroupTripPage: React.FC = () => {
         console.log('res:', res);
         console.log('data:', data);
 
-        const adjustProgress = data.usersAndTrackers.map((user: any) => ({
+        // TODO: fix 'any' type
+        const fetchedGroupInfo = data.usersAndTrackers.map((user: any) => ({
           name: user.name,
           id: user.id,
           progress: {
@@ -78,9 +78,7 @@ const GroupTripPage: React.FC = () => {
             language: user.language_count,
           },
         }));
-        setGroupInfo(adjustProgress);
-        console.log('adjustProgress', adjustProgress);
-        // setGroupStats(data);
+        setGroupInfo(fetchedGroupInfo);
       } catch (error) {
         console.error('Login error:', error);
       }
@@ -104,18 +102,17 @@ const GroupTripPage: React.FC = () => {
         body: JSON.stringify({ userId, habit }),
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to update progress on backend');
-      }
-
-      const data = await res.json(); // your backend returns { countAfterIncrement: newCount }
-      console.log('PATCH response:', data);
+      if (!res.ok) throw new Error('Failed to update progress on backend');
+      
+      const data = await res.json(); //  backend returns { countAfterIncrement: newCount }
 
       setGroupInfo((prevProgress) =>
-        prevProgress.map((user) => (user.id === userId ? { ...user, [habit]: data.countAfterIncrement } : user))
+        prevProgress.map((user) =>
+          user.id === userId ? { ...user, progress: { ...user.progress, [habit]: data.countAfterIncrement } } : user
+        )
       );
     } catch (err) {
-      console.log('Error updating progress', err);
+      console.error('Error updating progress', err);
     }
   };
 
@@ -126,10 +123,13 @@ const GroupTripPage: React.FC = () => {
     return calculateTotal(b.progress) - calculateTotal(a.progress);
   });
 
+  // variable to select the entire user object by their ID
+  const selectedUser = groupInfo.find((user) => user.id === selectedUserId);
+
   // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected (the SoloPage)
   return (
     <div style={{ padding: '20px' }}>
-      {!selectedUser ? (
+      {!selectedUserId ? (
         <>
           <h2>Trip Name: </h2>
           <h3>Trip Id: {tripId}</h3>
@@ -143,10 +143,10 @@ const GroupTripPage: React.FC = () => {
             <div style={{ flex: 1 }}>
               <h2>Leaderboard</h2>
               {sortedProgress.map((user, index) => (
-                //react requires key for el's in a loop, so used user.name as key
+                //react requires key for elements in a loop, used user.name as key to map the names instead of the id's
                 <div key={user.name}>
                   <button
-                    onClick={() => setSelectedUser(user)}
+                    onClick={() => setSelectedUserId(user.id)}
                     style={{
                       color: 'black',
                       fontWeight: 'bold',
@@ -184,12 +184,12 @@ const GroupTripPage: React.FC = () => {
         </>
       ) : (
         <>
-          <button onClick={() => setSelectedUser(null)}>Back to Group Page</button>
+          <button onClick={() => setSelectedUserId(null)}>Back to Group Page</button>
 
           <SoloPage
-            userId={selectedUser.id}
-            name={selectedUser.name}
-            progress={selectedUser.progress}
+            userId={selectedUser!.id}
+            name={selectedUser!.name}
+            progress={selectedUser!.progress}
             tripGoals={tripGoals}
             onProgressUpdate={(id, habit) => handleProgressUpdate(id, habit)}
           />
