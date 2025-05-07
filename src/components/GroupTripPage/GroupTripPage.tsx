@@ -87,11 +87,6 @@ const GroupTripPage: React.FC = () => {
     fetchGroupStats();
   }, [tripId, navigate]);
 
-  // TODO: I think the below 3 lines of code were Pete's and haven't been implemented yet. Will need to use JWTs?
-  // handles progress for a specific user.
-  // if a username matches the username passed in, we update their progress
-  // otherwise ... keep the user the same (don't update anything)
-
   const handleProgressUpdate = async (userId: number, habit: string) => {
     try {
       const res = await fetch(`http://localhost:3000/users/${userId}/${habit}`, {
