@@ -1,5 +1,3 @@
-// user signup!
-// link back to login page after signup
 import React from 'react';
 import './SignUp.css';
 import { Link, useNavigate } from 'react-router-dom';

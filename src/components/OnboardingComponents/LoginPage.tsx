@@ -1,5 +1,3 @@
-//login page here.
-//signup button if no login info yet
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -57,7 +55,6 @@ const LoginPage = () => {
         console.log('userId', userId);
         console.log('tripId', tripId);
         console.log('response', response);
-        // TODO: if user already part of a trip, go to trip page -- test and make sure this is working
         if (tripId) {
           console.log('about to navigate straight from login to group trip page', tripId);
           const encodedId = generateTripId(tripId)
@@ -76,14 +73,14 @@ const LoginPage = () => {
   return (
     <div className='page-wrapper'>
       <img src={gshark} className='gshark' />
-      <div className='logcontainer'>
+      <div className='container'>
         <form action='' onSubmit={handleSubmit}>
-          <div className='logheader'>
+          <div className='header'>
             <div className='text'>Log In</div>
             <div className='underline'></div>
           </div>
 
-          <div className='loginput-field'>
+          <div className='input-field'>
             <div className='input'>
               <img src={email_icon} alt='emailIcon' />
               <input type='email' name='email' id='email' placeholder='Email' onChange={handleInput} />
@@ -97,7 +94,7 @@ const LoginPage = () => {
             </div>
           </div>
           <div className='forgot-password'>
-            Forgot Password?<span>Click Here</span>
+            Forgot Password? <span>Click Here</span>
           </div>
           <div className='submit-container'>
             <button type='submit' className='submit-button'>
