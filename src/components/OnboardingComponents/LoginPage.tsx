@@ -8,7 +8,7 @@ import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
 import gshark from '../../assets/gshark.jpg';
 import { ValidateForm } from './LoginValidation';
-import { generateTripId, decodeTripId } from '../../../server/helperFuncs.ts';
+import { generateTripId } from '../../../server/helperFuncs.ts';
 
 const LoginPage = () => {
   //set up first initial state of our login form,
