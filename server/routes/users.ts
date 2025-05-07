@@ -5,7 +5,7 @@ const router = express.Router();
 
 // updating DB to increment trip
 router.patch('/:user/:habit', usersController.incrementHabit, (req, res) => {
-  res.status(204).json({ countAfterIncrement: res.locals.countAfterIncrement });
+  res.status(200).json({ countAfterIncrement: res.locals.countAfterIncrement });
 });
 
 router.patch('/setTrip', usersController.setUserTrip, (req, res) => {
