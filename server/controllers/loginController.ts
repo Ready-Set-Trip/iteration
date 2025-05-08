@@ -27,6 +27,12 @@ const loginController: LoginController = {
       const result = await db.query('SELECT password, name, id, trip_id FROM users WHERE email = $1', [email]);
       // return 404 status if that Username isn't in the database
       if (result.rows.length === 0) {
+        return next({
+          // TODO: fix logs/messages to obfuscate whether user or pass is wrong
+          log: 'verifyUser: username not found',
+          status: 404,
+          message: { err: 'Username not found' },
+        });
         return next(authError);
       }
 
@@ -40,7 +46,7 @@ const loginController: LoginController = {
       res.locals.name = result.rows[0].name;
       res.locals.userId = result.rows[0].id;
       res.locals.tripId = result.rows[0].trip_id;
-      res.locals.token = generateToken(result.rows[0].id, result.rows[0].name);
+      //res.locals.token = generateToken(result.rows[0].id, result.rows[0].name);
       
       return next();
       
