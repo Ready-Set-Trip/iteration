@@ -3,6 +3,7 @@
 // and send it to your friends (via email link) to come to the site and set up their profiles
 import React from 'react';
 import './template.css';
+import beachChairs from '../../assets/beach_chairs.jpg';
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -14,18 +15,13 @@ const TripTemplate = () => {
   const location = useLocation();
   const userId = location.state;
   let tempTripId;
-  // console.log('initial user ID:', userId)
-  // console.log('initial trip ID:', tripId)
 
   //we will handle data input by client,
   // should be ChangeEvent cox we will call onChange event down
   const handleTripnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTripName(e.target.value);
   };
-  const handleEmail = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleEmail = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmails = [...emails];
     newEmails[index] = e.target.value;
     setEmails(newEmails);
@@ -33,8 +29,6 @@ const TripTemplate = () => {
   //whenever we press invite button, will be handle the submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //   console.log('Trip created:', tripName);
-    // };
     const payload = {
       tripName,
       emails: emails.filter((email) => email.trim() !== ''),
@@ -91,72 +85,30 @@ const TripTemplate = () => {
     }
   };
   return (
-    //commented out code is the original code
-    // <div className='nametripcontainer'>
-    //   <form className='form' onSubmit={handleSubmit}>
-    //     <div className='tripname'>
-    //       <label>Name Your Trip</label>
-    //       <input
-    //         className='tripnamebox'
-    //         type='text'
-    //         placeholder='Enter your trip name'
-    //         value={tripName}
-    //         onChange={handleTripnameChange}
-    //         required
-    //       />
-    //     </div>
-
-    //     {tripId && (
-    //       <div className='tripid'>
-    //         New Trip Created! Your Trip ID is:
-    //         <strong className='bold'>{tripId}</strong>
-    //       </div>
-    //     )}
-    //     <div className='invitecontainer'>
-    //       <label> Invite Your Friends</label>
-    //       {emails.map((email, index) => (
-    //         <input
-    //           className='inputbox'
-    //           key={index}
-    //           type='email'
-    //           placeholder='Enter email'
-    //           value={email}
-    //           onChange={(e) => handleEmail(index, e)}
-    //         />
-    //       ))}
-    //       <button type='submit' className='invitebutton'>
-    //         Send Invite
-    //       </button>
-    //       <h5>After you get the id, please go to Group Page</h5>
-    //       <button
-    //         type='button'
-    //         className='direct_to_grouppage'
-    //         onClick={handleClick}
-    //       >
-    //         Group Page
-    //       </button>
-    //     </div>
-    //   </form>
-    // </div>
-    <div className='nametripcontainer'>
+    <div className='tt-page-wrapper'>
+      <div className='tt-background-image'>
+        <img src={beachChairs} alt='Beach vacation' />
+      </div>
       {!tripId && (
-        <form className='form' onSubmit={handleSubmit}>
-          <div className='tripname'>
-            <label>Name Your Trip</label>
+        <form className='form-card' onSubmit={handleSubmit}>
+          <div className='tripname-container'>
+            <label>What's Your Trip Called?</label>
+            <div className='underline'></div>
             <input
-              className='tripnamebox'
+              className='tripname-input-box'
               type='text'
-              placeholder='Enter your trip name'
+              placeholder='Enter a trip name'
               value={tripName}
               onChange={handleTripnameChange}
               required
             />
           </div>
-          <div className='invitecontainer'>
+          <div className='invite-container'>
             <label> Invite Your Friends</label>
+            <div className='underline'></div>
             {emails.map((email, index) => (
               <input
-                className='inputbox'
+                className='email-input-box'
                 key={index}
                 type='email'
                 placeholder='Enter email'
@@ -167,29 +119,19 @@ const TripTemplate = () => {
             <button type='submit' className='invitebutton'>
               Send Invite
             </button>
-            <h5>After you get the id, please go to Group Page</h5>
-            <button
-              type='button'
-              className='direct_to_grouppage'
-              onClick={handleClick}
-            >
-              Group Page
-            </button>
           </div>
         </form>
       )}
       {tripId && (
-        <div className='tripid'>
-          New Trip Created! Your Trip ID is:
-          <strong className='bold'>{tripId}</strong>
-          <h5>Please go to Group Page</h5>
-          <button
-            type='button'
-            className='direct_to_grouppage'
-            onClick={handleClick}
-          >
-            Group Page
-          </button>
+        <div className='form-card'>
+          <div className='tripid'>
+            New Trip Created! Your Trip ID is:
+            <strong>{tripId}</strong>
+            <h5>Take me to my group's page!</h5>
+            <button type='button' className='direct_to_grouppage' onClick={handleClick}>
+              Ready, Set, Trip!
+            </button>
+          </div>
         </div>
       )}
     </div>

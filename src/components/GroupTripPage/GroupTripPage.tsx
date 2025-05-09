@@ -148,7 +148,7 @@ const GroupTripPage: React.FC = () => {
                       fontSize: '18px',
                       padding: '10px',
                       backgroundColor:
-                        index === 0 ? '#ffd700' : index === 1 ? '#f2e8e8' : index === 2 ? '#cd7f32' : '#f0f0f0',
+                        index === 0 ? '#ffd700' : index === 1 ? '#c0c0c0' : index === 2 ? '#cd7f32' : '#ffffff',
                       borderRadius: '8px',
                       width: '100%',
                       textAlign: 'left',

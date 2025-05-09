@@ -1,64 +1,117 @@
-.tripname {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 30px;
-  margin-left: 20px;
-  font-size: 20px;
+.tt-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background-size: cover;
 }
-.tripnamebox {
-  font-size: 20px;
+.tt-background-image img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: -1;
 }
-.invitecontainer {
+.tt-page-wrapper {
+  background-size: cover;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-left: 20px;
-  width: 250px;
-}
-.nametripcontainer {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 200%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.tripname-container {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  gap: 10px;
+  margin-bottom: 30px;
+  font-size: 35px;
+  white-space: nowrap;
+  align-items: center;
+}
+.tripname-input-box {
+  width: 250px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  outline: none;
+  color: dimgray;
+  font-size: 20px;
+  border-radius: 10px;
+  text-indent: 10px;
+}
+.invite-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 250px;
+  font-size: 25px;
+  align-items: center;
 }
 .invitebutton {
-  margin-top: 20px;
-  width: 150px;
-  height: 30px;
+  display: flex;
   justify-content: center;
-  display: block;
-  flex-direction: block;
-  padding: 3px 20px;
-  border-radius: 20px;
-}
-.form {
+  align-items: center;
+  border-radius: 40px;
+  width: 150px;
+  height: 60px;
+  color: white;
+  background-color: #134b6e;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   font-size: 20px;
+  margin-top: 20px;
 }
-.inputbox {
-  width: 400px;
+.form-card {
+  font-size: 20px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  background: #134b6e75;
+  padding: 25px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
+}
+.email-input-box {
+  width: 250px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  outline: none;
+  color: dimgray;
+  font-size: 18px;
+  border-radius: 8px;
+  text-indent: 10px;
 }
 .tripid {
-  gap: 20px;
-  font-size: 18px;
-  margin-bottom: 20px;
-  padding: 3px 20px;
+  font-size: 24px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .direct_to_grouppage {
   display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 20px;
-  width: 170px;
-  height: 30px;
-  background: purple;
+  align-items: center;
+  border-radius: 40px;
+  width: 225px;
+  height: 60px;
   color: white;
+  background-color: #134b6e;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   font-size: 20px;
-  cursor: pointer;
-  margin-top: 30px;
 }
-.bold {
-  font-size: 22px;
+.underline {
+  width: 75px;
+  height: 5px;
+  background: rgb(255, 255, 255);
+  border-radius: 10px;
+  margin-bottom: 25px;
 }

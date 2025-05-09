@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import beach1_icon from '../../assets/beach1.jpg';
+import cancunPic from '../../assets/cancun.jpg';
 import './CreateJoinTrip.css';
 console.log('hi');
 const CreateJoinTrip = () => {
@@ -24,9 +24,9 @@ const CreateJoinTrip = () => {
   const handleClick = async () => {
     //check if the id exist or not, if it is exist navigate to grouptrip page
     try {
-      console.log('trip id: ', tripId)
-      console.log('user id:', userId)
-      console.log('json stringify', JSON.stringify({ userId, tripId }))
+      console.log('trip id: ', tripId);
+      console.log('user id:', userId);
+      console.log('json stringify', JSON.stringify({ userId, tripId }));
       const response = await fetch(`/trips/validate-id/${tripId.trim()}`);
       if (!response.ok) {
         console.log('response was ok');
@@ -55,35 +55,63 @@ const CreateJoinTrip = () => {
     }
   };
 
+  // return (
+  //   <div className='boxcontainer'>
+  //     <div className='background_pic'>
+  //       <img src={cancunPic} alt='beach_vacation' />
+  //     </div>
+  //     <div className='transparentContainer'>
+  //       <div className='createboxcontainer'>
+  //         <div className='textOption'>Create a new trip?</div>
+  //         <Link to='/TripTemplate' state={userId} className='clickme'>
+  //           Click Here
+  //         </Link>
+  //       </div>
+  //       <div className='createboxcontainer'>
+  //         <div className='textOption'>Have a trip ID already?</div>
+  //         <input className='inputbox' type='text' value={tripId} onChange={handleChange} placeholder='Enter your id' />
+  //         <button type='button' className='clickmego' onClick={handleClick} disabled={tripId.trim() === ''}>
+  //           Go
+  //         </button>
+  //         {error && <p className='errormsg'>{error}</p>}
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div className='boxcontainer'>
-      <div className='background_pic'>
-        <img src={beach1_icon} alt='beach_vacation' />
+    <div className='cjt-page-wrapper'>
+      <div className='cjt-background-image'>
+        <img src={cancunPic} alt='Beach vacation' />
       </div>
-      <div className='createboxcontainer'>
-        <div className='createbox'>Create a trip?</div>
-        <Link to='/TripTemplate' state={userId} className='clickme'>
-          Click Here
-        </Link>
-      </div>
-      <div className='createboxcontainer'>
-        <div className='createbox'>Have a trip ID already?</div>
-        <input
-          className='inputbox'
-          type='text'
-          value={tripId}
-          onChange={handleChange}
-          placeholder='Enter your id'
-        />
-        <button
-          type='button'
-          className='clickmego'
-          onClick={handleClick}
-          disabled={tripId.trim() === ''}
-        >
-          Go
-        </button>
-        {error && <p className='errormsg'>{error}</p>}
+      <div className='cjt-card-container'>
+        <div className='cjt-card'>
+          <div className='cjt-card-header'>
+            <div className='cjt-card-title'>Create a new trip?</div>
+            <div className='cjt-underline'></div>
+            <div className='cjt-spacer'></div>
+          </div>
+          <Link to='/TripTemplate' state={userId} className='cjt-action-button'>
+            Create Trip
+          </Link>
+        </div>
+
+        <div className='cjt-card'>
+          <div className='cjt-card-header'>
+            <div className='cjt-card-title'>Have a trip ID already?</div>
+            <div className='cjt-underline'></div>
+          </div>
+          <input
+            className='cjt-input-field'
+            type='text'
+            value={tripId}
+            onChange={handleChange}
+            placeholder='Enter trip ID'
+          />
+          <button type='button' className='cjt-action-button' onClick={handleClick} disabled={tripId.trim() === ''}>
+            Join Trip
+          </button>
+          {error && <span className='cjt-errordanger'>{error}</span>}
+        </div>
       </div>
     </div>
   );

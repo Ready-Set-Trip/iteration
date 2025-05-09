@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './Onboarding.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import './LoginPage.css';
 import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
-import gshark from '../../assets/gshark.jpg';
 import { ValidateForm } from './LoginValidation';
-import { generateTripId, decodeTripId } from '../../../server/helperFuncs.ts';
+import { generateTripId } from '../../../server/helperFuncs.ts';
+import beachVid from '../../assets/beachVid.mp4';
 
 const LoginPage = () => {
   //set up first initial state of our login form,
@@ -57,7 +56,7 @@ const LoginPage = () => {
         console.log('response', response);
         if (tripId) {
           console.log('about to navigate straight from login to group trip page', tripId);
-          const encodedId = generateTripId(tripId)
+          const encodedId = generateTripId(tripId);
           navigate(`/GroupTripPage/${encodedId}`);
         } else {
           navigate('/CreateJoinTrip', { state: { userId } });
@@ -72,7 +71,9 @@ const LoginPage = () => {
 
   return (
     <div className='page-wrapper'>
-      <img src={gshark} className='gshark' />
+      <video className='beachVid' autoPlay loop muted>
+        <source src={beachVid} type='video/mp4' />
+      </video>
       <div className='container'>
         <form action='' onSubmit={handleSubmit}>
           <div className='header'>
@@ -100,7 +101,7 @@ const LoginPage = () => {
             <button type='submit' className='submit-button'>
               Log In
             </button>
-            <Link to='/signup' className='submit-button'>
+            <Link to='/signup' className='faded-submit-button'>
               Sign Up
             </Link>
           </div>
