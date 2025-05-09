@@ -43,6 +43,7 @@ const GroupTripPage: React.FC = () => {
   // gets the last 5 characters of the URL string. sets to null if the URL is only /GroupTripPage/
   const location = useLocation();
   let tripId = location.state?.tripId;
+  //console.debug('this is the tripID: ' + tripId)
   if (!tripId) {
     const trailingUrl = location.pathname;
     tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
@@ -173,7 +174,7 @@ const GroupTripPage: React.FC = () => {
             </div>
             <div style={{ flex: 1 }}>
               <h2>Message Board</h2>
-              <MessageBoard />
+              <MessageBoard tripID={tripId} />
             </div>
           </div>
         </>

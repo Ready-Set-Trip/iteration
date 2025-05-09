@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import db from '../models/databaseModel';
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+
 
 interface LoginController {
   verifyUser(req: Request, res: Response, next: NextFunction): Promise<void>;
@@ -16,44 +16,45 @@ interface LoginController {
 const loginController: LoginController = {
   async verifyUser(req, res, next) {
     const { email, password } = req.body;
+    // error message
+    const authError = {
+      log: 'Authentication error',
+      status: 401,
+      message: { err: 'Invalid credentials' },
+    };
+
     try {
       const result = await db.query('SELECT password, name, id, trip_id FROM users WHERE email = $1', [email]);
       // return 404 status if that Username isn't in the database
       if (result.rows.length === 0) {
         return next({
-          // TODO: fix logs/messages to obfuscate whether user or pass is wrong 
+          // TODO: fix logs/messages to obfuscate whether user or pass is wrong
           log: 'verifyUser: username not found',
           status: 404,
           message: { err: 'Username not found' },
         });
+        return next(authError);
       }
+
+      const storedPass = result.rows[0].password;
+      const passwordMatch = await bcrypt.compare(password, storedPass);
+      
+      if (!passwordMatch) {
+        return next(authError);
+      }
+
       res.locals.name = result.rows[0].name;
       res.locals.userId = result.rows[0].id;
       res.locals.tripId = result.rows[0].trip_id;
-
-      // generate JWT
-      // res.locals.token = jwt.sign(
-      //   { userId: result.rows[0].id},
-      //   process.env.JWT_SECRET,
-      //   { expiresIn: '1hr'}
-      // );
-
-      // checking password
-      const storedPass = result.rows[0].password;
-      const passwordMatch = await bcrypt.compare(password, storedPass);
-      if (passwordMatch) return next();
-      else
-        return next({
-          // TODO: fix logs/messages to obfuscate whether user or pass is wrong
-          log: 'verifyUser: incorrect password',
-          status: 401,
-          message: { err: 'Password is incorrect' },
-        });
+      //res.locals.token = generateToken(result.rows[0].id, result.rows[0].name);
+      
+      return next();
+      
     } catch (error) {
       return next({
         log: 'error in verifyUser function',
         status: 500,
-        message: { err: error.message },
+        message: { err: 'Internal server error' },
       });
     }
   },
