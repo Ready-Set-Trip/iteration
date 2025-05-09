@@ -1,14 +1,11 @@
-//login page here.
-//signup button if no login info yet
-import React from 'react';
+import React, { useState } from 'react';
+import './Onboarding.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import './LoginPage.css';
 import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
-import gshark from '../../assets/gshark.jpg';
 import { ValidateForm } from './LoginValidation';
 import { generateTripId } from '../../../server/helperFuncs.ts';
+import beachVid from '../../assets/beachVid.mp4';
 
 const LoginPage = () => {
   //set up first initial state of our login form,
@@ -57,10 +54,9 @@ const LoginPage = () => {
         console.log('userId', userId);
         console.log('tripId', tripId);
         console.log('response', response);
-        // TODO: if user already part of a trip, go to trip page -- test and make sure this is working
         if (tripId) {
           console.log('about to navigate straight from login to group trip page', tripId);
-          const encodedId = generateTripId(tripId)
+          const encodedId = generateTripId(tripId);
           navigate(`/GroupTripPage/${encodedId}`);
         } else {
           navigate('/CreateJoinTrip', { state: { userId } });
@@ -75,15 +71,17 @@ const LoginPage = () => {
 
   return (
     <div className='page-wrapper'>
-      <img src={gshark} className='gshark' />
-      <div className='logcontainer'>
+      <video className='beachVid' autoPlay loop muted>
+        <source src={beachVid} type='video/mp4' />
+      </video>
+      <div className='container'>
         <form action='' onSubmit={handleSubmit}>
-          <div className='logheader'>
+          <div className='header'>
             <div className='text'>Log In</div>
             <div className='underline'></div>
           </div>
 
-          <div className='loginput-field'>
+          <div className='input-field'>
             <div className='input'>
               <img src={email_icon} alt='emailIcon' />
               <input type='email' name='email' id='email' placeholder='Email' onChange={handleInput} />
@@ -97,13 +95,13 @@ const LoginPage = () => {
             </div>
           </div>
           <div className='forgot-password'>
-            Forgot Password?<span>Click Here</span>
+            Forgot Password? <span>Click Here</span>
           </div>
           <div className='submit-container'>
             <button type='submit' className='submit-button'>
               Log In
             </button>
-            <Link to='/signup' className='submit-button'>
+            <Link to='/signup' className='faded-submit-button'>
               Sign Up
             </Link>
           </div>

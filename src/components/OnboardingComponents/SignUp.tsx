@@ -1,14 +1,11 @@
-// user signup!
-// link back to login page after signup
-import React from 'react';
-import './SignUp.css';
+import React, { useState } from 'react';
+import './Onboarding.css';
 import { Link, useNavigate } from 'react-router-dom';
 import user_icon from '../../assets/person.png';
 import email_icon from '../../assets/email.png';
 import password_icon from '../../assets/password.png';
-import { useState } from 'react';
 import { ValidateFormForSignUp } from './SignUpValidation';
-import gshark from '../../assets/gshark.jpg';
+import beachVid from '../../assets/beachVid.mp4';
 
 const SignUp = () => {
   //set up first initial state of our login form,
@@ -66,7 +63,9 @@ const SignUp = () => {
 
   return (
     <div className='page-wrapper'>
-      <img src={gshark} className='gshark' />
+      <video className='beachVid' autoPlay loop muted>
+        <source src={beachVid} type='video/mp4' />
+      </video>
       <div className='container'>
         <form action='' onSubmit={handleSubmit}>
           <div className='header'>
@@ -77,42 +76,18 @@ const SignUp = () => {
           <div className='input-field'>
             <div className='input'>
               <img src={user_icon} alt='userIcon' />
-              <input
-                type='text'
-                name='name'
-                id='name'
-                placeholder='Name'
-                onChange={handleInput}
-              />
-              {errors.name && (
-                <span className='errordanger'>{errors.name}</span>
-              )}
+              <input type='text' name='name' id='name' placeholder='Name' onChange={handleInput} />
+              {errors.name && <span className='errordanger'>{errors.name}</span>}
             </div>
             <div className='input'>
               <img src={email_icon} alt='emailIcon' />
-              <input
-                type='email'
-                name='email'
-                id='email'
-                placeholder='Email'
-                onChange={handleInput}
-              />
-              {errors.email && (
-                <span className='errordanger'>{errors.email}</span>
-              )}
+              <input type='email' name='email' id='email' placeholder='Email' onChange={handleInput} />
+              {errors.email && <span className='errordanger'>{errors.email}</span>}
             </div>
             <div className='input'>
               <img src={password_icon} alt='passwordIcon' />
-              <input
-                type='password'
-                name='password'
-                id='password'
-                placeholder='Password'
-                onChange={handleInput}
-              />
-              {errors.password && (
-                <span className='errordanger'>{errors.password}</span>
-              )}
+              <input type='password' name='password' id='password' placeholder='Password' onChange={handleInput} />
+              {errors.password && <span className='errordanger'>{errors.password}</span>}
             </div>
           </div>
 
@@ -120,7 +95,7 @@ const SignUp = () => {
             <button type='submit' className='submit-button'>
               Sign Up
             </button>
-            <Link to='/' className='submit-button'>
+            <Link to='/' className='faded-submit-button'>
               Log In
             </Link>
           </div>

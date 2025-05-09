@@ -24,8 +24,8 @@ const WorkoutTracker: React.FC<TrackerProps> = ({ habit, value, goal, onIncremen
           value={percentage}
           text={`${value}/${goal}`}
           styles={buildStyles({
-            textColor: '#000',
-            pathColor: 'slateblue',
+            textColor: '#fff',
+            pathColor: '#e2ca76',
             trailColor: '#eee',
           })}
         />
