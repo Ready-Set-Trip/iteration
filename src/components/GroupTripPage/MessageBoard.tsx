@@ -70,7 +70,8 @@ const MessageBoard: React.FC = () => {
         <div
           style={{
             overflow: 'scroll',
-            height: '120px',
+            height: '250px',
+            width: '75%',
             border: '1px solid #fff',
             padding: '5px',
           }}

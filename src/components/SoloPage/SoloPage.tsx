@@ -31,7 +31,7 @@ const SoloPage: React.FC<SoloPageProps> = ({ userId, name, progress, tripGoals, 
   // renders the page ... progess.workout for example is the value currently in useState of Progress for "workout"
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2> {name}'s Current Status</h2>
+      <h2> {name}'s Current Progress</h2>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
         <Tracker
           habit='workout'

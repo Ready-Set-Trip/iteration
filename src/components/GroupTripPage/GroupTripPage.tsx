@@ -12,8 +12,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 // TODO: change the type (or make it an interface?)
 // need to have a variable number of habits
-// need to have strings for the habit names
-// the resulting type may be a different structure. We need like a variable length object
 const tripGoals: Progress = {
   workout: 20,
   diet: 15,
@@ -148,9 +146,10 @@ const GroupTripPage: React.FC = () => {
                       fontSize: '18px',
                       padding: '10px',
                       backgroundColor:
-                        index === 0 ? '#ffd700' : index === 1 ? '#c0c0c0' : index === 2 ? '#cd7f32' : '#ffffff',
+                        index === 0 ? '#ffd700' : index === 1 ? '#c0c0c0' : index === 2 ? '#cd7f32' : '#ffffff00',
                       borderRadius: '8px',
-                      width: '100%',
+                      borderColor: 'white',
+                      width: '30%',
                       textAlign: 'left',
                       cursor: 'pointer',
                     }}

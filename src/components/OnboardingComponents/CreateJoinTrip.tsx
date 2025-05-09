@@ -55,29 +55,6 @@ const CreateJoinTrip = () => {
     }
   };
 
-  // return (
-  //   <div className='boxcontainer'>
-  //     <div className='background_pic'>
-  //       <img src={cancunPic} alt='beach_vacation' />
-  //     </div>
-  //     <div className='transparentContainer'>
-  //       <div className='createboxcontainer'>
-  //         <div className='textOption'>Create a new trip?</div>
-  //         <Link to='/TripTemplate' state={userId} className='clickme'>
-  //           Click Here
-  //         </Link>
-  //       </div>
-  //       <div className='createboxcontainer'>
-  //         <div className='textOption'>Have a trip ID already?</div>
-  //         <input className='inputbox' type='text' value={tripId} onChange={handleChange} placeholder='Enter your id' />
-  //         <button type='button' className='clickmego' onClick={handleClick} disabled={tripId.trim() === ''}>
-  //           Go
-  //         </button>
-  //         {error && <p className='errormsg'>{error}</p>}
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
   return (
     <div className='cjt-page-wrapper'>
       <div className='cjt-background-image'>
