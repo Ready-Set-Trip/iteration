@@ -6,49 +6,23 @@ interface SignupController {
   createUser(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
+// TODO: add an optional field to enter trip ID, will automatically assign user to that trip
+// might have to change redirect options
+// unless we just want to handle this on the create/join trip page
 const signupController: SignupController = {
   async createUser(req, res, next) {
     const { name, email, password } = req.body;
-    
+    res.locals.name = name;
     try {
       console.log('trying to createUser');
       const hashedPass = await bcrypt.hash(password, 10);
-      
-      // Store the query result in a variable
-      const result = await db.query(
-        'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, trip_id',
-        [name, email, hashedPass]
-      );
-
-      const newUser = result.rows[0];
-      
-      // Generate JWT token for the new user
-      const token = generateToken({
-        userId: newUser.id,
-        name: newUser.name,
-        tripId: newUser.trip_id
-      });
-
-      // Set response locals
-      res.locals = {
-        token,
-        user: {
-          userId: newUser.id,
-          name: newUser.name,
-          tripId: newUser.trip_id
-        },
-        name: newUser.name
-      };
-      
+      res.locals.createdUser = await db.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', [
+        name,
+        email,
+        hashedPass,
+      ]);
       return next();
-    } catch (error: any) {
-      if (error.code === '23505') { // Unique violation error code
-        return next({
-          log: 'Email already exists',
-          status: 409,
-          message: { err: 'Email already in use' },
-        });
-      }
+    } catch (error) {
       return next({
         log: 'error in createUser function',
         status: 500,
