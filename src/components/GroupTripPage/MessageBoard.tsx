@@ -7,7 +7,7 @@ interface Message {
   created_at?: string;
 }
 
-const MessageBoard: React.FC = () => {
+const MessageBoard: React.FC = (props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [newName, setNewName] = useState('');
@@ -47,12 +47,12 @@ const MessageBoard: React.FC = () => {
         },
         body: JSON.stringify({
           name: newName,
-          message: newMessage
+          message: newMessage,
         }),
       });
 
       if (!response.ok) throw new Error('Failed to post message');
-      
+
       const result = await response.json();
       // Add the new message to the beginning of the messages array
       setMessages([result.message, ...messages]);

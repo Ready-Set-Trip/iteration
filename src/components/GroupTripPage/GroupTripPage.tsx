@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
 import MessageBoard from './MessageBoard';
 import { useLocation, useNavigate } from 'react-router-dom';
+// import UserContext from '../../contexts/UserContext';
 
 //LATER - figure out how to pass these numbers down and not hardcode ...
 
@@ -52,11 +53,14 @@ const GroupTripPage: React.FC = () => {
   // super jank way getting the tripId off of the URL.
   // gets the last 5 characters of the URL string. sets to null if the URL is only /GroupTripPage/
   const location = useLocation();
-  let tripId = location.state?.tripId;
-  if (!tripId) {
-    const trailingUrl = location.pathname;
-    tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
-  }
+
+  const tripId = location.state?.tripId;
+  // const tripId = useContext(UserContext);
+
+  // if (!tripId) {
+  //   const trailingUrl = location.pathname;
+  //   tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
+  // }
 
   console.log('tripId inside GroupTripPage', tripId);
 
@@ -73,7 +77,9 @@ const GroupTripPage: React.FC = () => {
     }
     const fetchGroupStats = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/trips/groupStats/${tripId}`);
+        const res = await fetch(
+          `http://localhost:3000/trips/groupStats/${tripId}`
+        );
         if (!res.ok) {
           throw new Error('Failed to fetch group stats');
         }
@@ -103,7 +109,11 @@ const GroupTripPage: React.FC = () => {
   // if a username matches the username passed in, we update their progress
   // otherwise ... keep the user the same (don't update anything)
 
-  const handleProgressUpdate = async (userId: string, habitObj: { [key: string]: number }, updatedValue: number) => {
+  const handleProgressUpdate = async (
+    userId: string,
+    habitObj: { [key: string]: number },
+    updatedValue: number
+  ) => {
     // why is the only thing console.logging habitObj?
     console.log('hi');
     console.log('userId', userId);
@@ -116,13 +126,16 @@ const GroupTripPage: React.FC = () => {
     console.log('habit', habit);
 
     try {
-      const res = await fetch(`http://localhost:3000/users/${userId}/${habit}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ updatedValue }),
-      });
+      const res = await fetch(
+        `http://localhost:3000/users/${userId}/${habit}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ updatedValue }),
+        }
+      );
 
       if (!res.ok) {
         throw new Error('Failed to update progress on backend');
@@ -173,8 +186,9 @@ const GroupTripPage: React.FC = () => {
           <h3>Trip Id: {tripId}</h3>
           <h3>Trip Goals:</h3>
           <ul>
-            Workout: {tripGoals.workout} sessions <strong>|</strong> Diet: {tripGoals.diet} days of healthy eating{' '}
-            <strong>|</strong> Language: {tripGoals.language} lessons
+            Workout: {tripGoals.workout} sessions <strong>|</strong> Diet:{' '}
+            {tripGoals.diet} days of healthy eating <strong>|</strong> Language:{' '}
+            {tripGoals.language} lessons
           </ul>
 
           <div style={{ display: 'flex', gap: '40px' }}>
@@ -190,7 +204,13 @@ const GroupTripPage: React.FC = () => {
                       fontSize: '18px',
                       padding: '10px',
                       backgroundColor:
-                        index === 0 ? '#ffd700' : index === 1 ? '#f2e8e8' : index === 2 ? '#cd7f32' : '#f0f0f0',
+                        index === 0
+                          ? '#ffd700'
+                          : index === 1
+                          ? '#f2e8e8'
+                          : index === 2
+                          ? '#cd7f32'
+                          : '#f0f0f0',
                       borderRadius: '8px',
                       width: '100%',
                       textAlign: 'left',
@@ -220,26 +240,39 @@ const GroupTripPage: React.FC = () => {
             </div>
             <div style={{ flex: 1 }}>
               <h2>Message Board</h2>
-              <MessageBoard />
+              <MessageBoard selectedUser={selectedUser} />
             </div>
           </div>
         </>
       ) : (
         <>
-          <button onClick={() => setSelectedUser(null)}>Back to Group Page</button>
+          <button onClick={() => setSelectedUser(null)}>
+            Back to Group Page
+          </button>
           <SoloPage
-            username={groupProgress.find((user) => user.id === selectedUser)?.username || ''}
+            username={
+              groupProgress.find((user) => user.id === selectedUser)
+                ?.username || ''
+            }
             progress={{
-              workout: groupProgress.find((user) => user.id === selectedUser)?.workout || 0,
-              diet: groupProgress.find((user) => user.id === selectedUser)?.diet || 0,
-              language: groupProgress.find((user) => user.id === selectedUser)?.language || 0,
+              workout:
+                groupProgress.find((user) => user.id === selectedUser)
+                  ?.workout || 0,
+              diet:
+                groupProgress.find((user) => user.id === selectedUser)?.diet ||
+                0,
+              language:
+                groupProgress.find((user) => user.id === selectedUser)
+                  ?.language || 0,
             }}
             tripGoals={{
               workout: tripGoals.workout,
               diet: tripGoals.diet,
               language: tripGoals.language,
             }}
-            onProgressUpdate={(habit: keyof ProgressState) => handleProgressUpdate(selectedUser!, habit)}
+            onProgressUpdate={(habit: keyof ProgressState) =>
+              handleProgressUpdate(selectedUser!, habit)
+            }
           />
         </>
       )}

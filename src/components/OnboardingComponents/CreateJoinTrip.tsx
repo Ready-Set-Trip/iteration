@@ -4,29 +4,35 @@
 
 //stretch goal: view old trips? button
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import beach1_icon from '../../assets/beach1.jpg';
 import './CreateJoinTrip.css';
+import TripIdContext from '../../contexts/TripIdContext';
+import UserIdContext from '../../contexts/UserIdContext';
 console.log('hi');
+
 const CreateJoinTrip = () => {
-  const [tripId, setId] = useState('');
+  // const [tripId, setId] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = location.state?.userId;
+  // const userId = location.state?.userId;
+
+  const [tripId, setTripId] = useContext(TripIdContext);
+  const [userId, setUserId] = useContext(UserIdContext);
 
   //handleChange
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
+    setTripId(e.target.value);
     setError('');
   };
   const handleClick = async () => {
     //check if the id exist or not, if it is exist navigate to grouptrip page
     try {
-      console.log('trip id: ', tripId)
-      console.log('user id:', userId)
-      console.log('json stringify', JSON.stringify({ userId, tripId }))
+      console.log('trip id: ', tripId);
+      console.log('user id:', userId);
+      console.log('json stringify', JSON.stringify({ userId, tripId }));
       const response = await fetch(`/trips/validate-id/${tripId.trim()}`);
       if (!response.ok) {
         console.log('response was ok');

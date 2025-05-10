@@ -18,7 +18,9 @@ const LoginPage = () => {
     password: '',
   });
   //also setError, either email or password should be string according to typescript
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
 
   const navigate = useNavigate();
   //we will handle data input by client,
@@ -59,11 +61,17 @@ const LoginPage = () => {
         console.log('response', response);
         // TODO: if user already part of a trip, go to trip page -- test and make sure this is working
         if (tripId) {
-          console.log('about to navigate straight from login to group trip page', tripId);
-          const encodedId = generateTripId(tripId)
-          navigate(`/GroupTripPage/${encodedId}`);
+          console.log(
+            'about to navigate straight from login to group trip page',
+            tripId
+          );
+          const encodedId = generateTripId(tripId);
+          navigate(`/GroupTripPage/${encodedId}`, {
+            state: { tripId: encodedId }, //Ansara passed state through navigate()
+            replace: true,
+          }); //Ansara added { replace: true } to replace the current history entry. *This is useful for cases like login redirects, where you don’t want users to be able to use the back button to return to the previous page.
         } else {
-          navigate('/CreateJoinTrip', { state: { userId } });
+          navigate('/CreateJoinTrip', { state: { userId }, replace: true });
         }
         return data;
       } catch (error) {
@@ -86,14 +94,30 @@ const LoginPage = () => {
           <div className='loginput-field'>
             <div className='input'>
               <img src={email_icon} alt='emailIcon' />
-              <input type='email' name='email' id='email' placeholder='Email' onChange={handleInput} />
-              {errors.email && <span className='errordanger'>{errors.email}</span>}
+              <input
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
+                onChange={handleInput}
+              />
+              {errors.email && (
+                <span className='errordanger'>{errors.email}</span>
+              )}
             </div>
 
             <div className='input'>
               <img src={password_icon} alt='passwordIcon' />
-              <input type='password' name='password' id='password' placeholder='Password' onChange={handleInput} />
-              {errors.password && <span className='errordanger'>{errors.password}</span>}
+              <input
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+                onChange={handleInput}
+              />
+              {errors.password && (
+                <span className='errordanger'>{errors.password}</span>
+              )}
             </div>
           </div>
           <div className='forgot-password'>

@@ -4,12 +4,15 @@
 import React from 'react';
 import './template.css';
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import UserContext from '../../contexts/TripIdContext';
 
 const TripTemplate = () => {
   const [tripName, setTripName] = useState('');
   const [emails, setEmails] = useState(['', '', '', '']);
-  const [tripId, setTripId] = useState<string | null>(null);
+  // const [tripId, setTripId] = useState<string | null>(null);
+  const tripId = useContext(UserContext);
+
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.state;
@@ -91,53 +94,6 @@ const TripTemplate = () => {
     }
   };
   return (
-    //commented out code is the original code
-    // <div className='nametripcontainer'>
-    //   <form className='form' onSubmit={handleSubmit}>
-    //     <div className='tripname'>
-    //       <label>Name Your Trip</label>
-    //       <input
-    //         className='tripnamebox'
-    //         type='text'
-    //         placeholder='Enter your trip name'
-    //         value={tripName}
-    //         onChange={handleTripnameChange}
-    //         required
-    //       />
-    //     </div>
-
-    //     {tripId && (
-    //       <div className='tripid'>
-    //         New Trip Created! Your Trip ID is:
-    //         <strong className='bold'>{tripId}</strong>
-    //       </div>
-    //     )}
-    //     <div className='invitecontainer'>
-    //       <label> Invite Your Friends</label>
-    //       {emails.map((email, index) => (
-    //         <input
-    //           className='inputbox'
-    //           key={index}
-    //           type='email'
-    //           placeholder='Enter email'
-    //           value={email}
-    //           onChange={(e) => handleEmail(index, e)}
-    //         />
-    //       ))}
-    //       <button type='submit' className='invitebutton'>
-    //         Send Invite
-    //       </button>
-    //       <h5>After you get the id, please go to Group Page</h5>
-    //       <button
-    //         type='button'
-    //         className='direct_to_grouppage'
-    //         onClick={handleClick}
-    //       >
-    //         Group Page
-    //       </button>
-    //     </div>
-    //   </form>
-    // </div>
     <div className='nametripcontainer'>
       {!tripId && (
         <form className='form' onSubmit={handleSubmit}>
