@@ -105,6 +105,7 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ tripID }) => {
         height: '300px',
         width: '75%',
         overflowY: 'auto',
+        color: 'black',
         border: '1px solid #ddd',
         padding: '10px',
         marginBottom: '15px',
