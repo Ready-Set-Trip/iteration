@@ -5,33 +5,21 @@
 // pass down banner w/ top leader(s) & countdown
 // message board component pulled in here
 
-//import things you need!
 import React, { useState, useEffect } from 'react';
 import SoloPage from '../SoloPage/SoloPage';
 import MessageBoard from './MessageBoard';
 import { useLocation, useNavigate } from 'react-router-dom';
 // import UserContext from '../../contexts/UserContext';
 
-//LATER - figure out how to pass these numbers down and not hardcode ...
-
-type TripGoals = {
-  workout: number;
-  diet: number;
-  language: number;
-};
-
-const tripGoals: TripGoals = {
+// TODO: change the type (or make it an interface?)
+// need to have a variable number of habits
+// need to have strings for the habit names
+// the resulting type may be a different structure. We need like a variable length object
+const tripGoals: Progress = {
   workout: 20,
   diet: 15,
   language: 10,
 };
-
-//helper function for calculating total. also ts for progress.
-const calculateTotal = (progress: Progress) => {
-  return progress.workout + progress.diet + progress.language;
-};
-
-// type definitions
 
 type Progress = {
   workout: number;
@@ -39,12 +27,14 @@ type Progress = {
   language: number;
 };
 
-type UserProgress = {
-  username: string;
-  id: string;
-  workout: number;
-  diet: number;
-  language: number;
+type UserInfo = {
+  name: string;
+  id: number;
+  progress: Progress;
+};
+
+const calculateTotal = (progress: Progress) => {
+  return Object.values(progress).reduce((sum, value) => sum + value, 0);
 };
 
 //define page's react componenet
@@ -62,12 +52,8 @@ const GroupTripPage: React.FC = () => {
   //   tripId = trailingUrl.length > 15 ? trailingUrl.slice(-5) : null;
   // }
 
-  console.log('tripId inside GroupTripPage', tripId);
-
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [groupProgress, setGroupProgress] = useState<UserProgress[]>([]);
-
-  // const [groupStats, setGroupStats] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [groupInfo, setGroupInfo] = useState<UserInfo[]>([]);
 
   useEffect(() => {
     if (!tripId) {
@@ -75,6 +61,7 @@ const GroupTripPage: React.FC = () => {
       navigate('/');
       return;
     }
+
     const fetchGroupStats = async () => {
       try {
         const res = await fetch(
@@ -87,16 +74,17 @@ const GroupTripPage: React.FC = () => {
         console.log('res:', res);
         console.log('data:', data);
 
-        const adjustProgress = data.usersAndTrackers.map((user: any) => ({
-          username: user.name,
+        // TODO: fix 'any' type
+        const fetchedGroupInfo = data.usersAndTrackers.map((user: any) => ({
+          name: user.name,
           id: user.id,
-          workout: user.workout_count,
-          diet: user.diet_count,
-          language: user.language_count,
+          progress: {
+            workout: user.workout_count,
+            diet: user.diet_count,
+            language: user.language_count,
+          },
         }));
-        setGroupProgress(adjustProgress);
-        console.log('adjustProgress', adjustProgress);
-        // setGroupStats(data);
+        setGroupInfo(fetchedGroupInfo);
       } catch (error) {
         console.error('Login error:', error);
       }
@@ -105,6 +93,7 @@ const GroupTripPage: React.FC = () => {
     fetchGroupStats();
   }, [tripId, navigate]);
 
+<<<<<<< HEAD
   // handles progress for a specific user.
   // if a username matches the username passed in, we update their progress
   // otherwise ... keep the user the same (don't update anything)
@@ -136,51 +125,46 @@ const GroupTripPage: React.FC = () => {
           body: JSON.stringify({ updatedValue }),
         }
       );
+=======
+  const handleProgressUpdate = async (userId: number, habit: string) => {
+    try {
+      const res = await fetch(`http://localhost:3000/users/${userId}/${habit}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, habit }),
+      });
+>>>>>>> dev
 
-      if (!res.ok) {
-        throw new Error('Failed to update progress on backend');
-      }
+      if (!res.ok) throw new Error('Failed to update progress on backend');
+      
+      const data = await res.json(); //  backend returns { countAfterIncrement: newCount }
 
-      const data = await res.json(); // your backend returns { countAfterIncrement: newCount }
-      console.log('PATCH response:', data);
-
-      setGroupProgress((prevProgress) =>
+      setGroupInfo((prevProgress) =>
         prevProgress.map((user) =>
-          user.id === userId
-            ? {
-                ...user,
-                [habit]: data.countAfterIncrement,
-              }
-            : user
+          user.id === userId ? { ...user, progress: { ...user.progress, [habit]: data.countAfterIncrement } } : user
         )
       );
     } catch (err) {
-      console.log('Error updating progress', err);
+      console.error('Error updating progress', err);
     }
   };
 
   // sort the leaderboard (for each user, calc the total progress and sort from high to low)
-  // groupProgress is unsorted list of Users. [...] makes a copy - don't mutate original.
+  // groupInfo is unsorted list of Users. [...] makes a copy - don't mutate original.
   // calculateTotal(b.progress) - calculateTotal(a.progress) --> means if b's total is bigger that a's... etc.
-  const sortedProgress = [...groupProgress].sort((a, b) => {
-    return (
-      calculateTotal({
-        workout: b.workout,
-        diet: b.diet,
-        language: b.language,
-      }) -
-      calculateTotal({
-        workout: a.workout,
-        diet: a.diet,
-        language: a.language,
-      })
-    );
+  const sortedProgress = [...groupInfo].sort((a, b) => {
+    return calculateTotal(b.progress) - calculateTotal(a.progress);
   });
 
-  // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected
+  // variable to select the entire user object by their ID
+  const selectedUser = groupInfo.find((user) => user.id === selectedUserId);
+
+  // render section. note tenary operator -- saying if user is null, display first set. else ... display the user selected (the SoloPage)
   return (
     <div style={{ padding: '20px' }}>
-      {!selectedUser ? (
+      {!selectedUserId ? (
         <>
           <h2>Trip Name: </h2>
           <h3>Trip Id: {tripId}</h3>
@@ -195,11 +179,12 @@ const GroupTripPage: React.FC = () => {
             <div style={{ flex: 1 }}>
               <h2>Leaderboard</h2>
               {sortedProgress.map((user, index) => (
-                //react requires key for el's in a loop, so used user.username as key
-                <div key={user.username}>
+                //react requires key for elements in a loop, used user.name as key to map the names instead of the id's
+                <div key={user.name}>
                   <button
-                    onClick={() => setSelectedUser(user.username)}
+                    onClick={() => setSelectedUserId(user.id)}
                     style={{
+                      color: 'black',
                       fontWeight: 'bold',
                       fontSize: '18px',
                       padding: '10px',
@@ -217,22 +202,17 @@ const GroupTripPage: React.FC = () => {
                       cursor: 'pointer',
                     }}
                   >
-                    #{index + 1} - {user.username} - Total:{' '}
-                    {calculateTotal({
-                      workout: user.workout,
-                      diet: user.diet,
-                      language: user.language,
-                    })}
+                    #{index + 1} - {user.name} - Total: {calculateTotal(user.progress)}
                   </button>
                   <ul>
                     <li>
-                      Workout: {user.workout} / {tripGoals.workout}
+                      Workout: {user.progress.workout} / {tripGoals.workout}
                     </li>
                     <li>
-                      Diet: {user.diet} / {tripGoals.diet}
+                      Diet: {user.progress.diet} / {tripGoals.diet}
                     </li>
                     <li>
-                      Language: {user.language} / {tripGoals.language}
+                      Language: {user.progress.language} / {tripGoals.language}
                     </li>
                   </ul>
                 </div>
@@ -246,6 +226,7 @@ const GroupTripPage: React.FC = () => {
         </>
       ) : (
         <>
+<<<<<<< HEAD
           <button onClick={() => setSelectedUser(null)}>
             Back to Group Page
           </button>
@@ -273,6 +254,16 @@ const GroupTripPage: React.FC = () => {
             onProgressUpdate={(habit: keyof ProgressState) =>
               handleProgressUpdate(selectedUser!, habit)
             }
+=======
+          <button onClick={() => setSelectedUserId(null)}>Back to Group Page</button>
+
+          <SoloPage
+            userId={selectedUser!.id}
+            name={selectedUser!.name}
+            progress={selectedUser!.progress}
+            tripGoals={tripGoals}
+            onProgressUpdate={(id, habit) => handleProgressUpdate(id, habit)}
+>>>>>>> dev
           />
         </>
       )}

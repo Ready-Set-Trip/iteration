@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 // import './App.css';
 import LoginPage from './components/OnboardingComponents/LoginPage';
 import SignUp from './components/OnboardingComponents/SignUp';
