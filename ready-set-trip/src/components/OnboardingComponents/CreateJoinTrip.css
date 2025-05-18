@@ -1,0 +1,101 @@
+.cjt-page-wrapper {
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+.cjt-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+.cjt-background-image img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.cjt-card-container {
+  position: relative;
+  display: flex;
+  gap: 40px;
+  z-index: 1;
+}
+
+.cjt-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #134b6e80;
+  padding: 30px;
+  border-radius: 40px;
+  width: 300px;
+}
+
+.cjt-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cjt-card-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.cjt-underline {
+  width: 50px;
+  height: 4px;
+  background: rgb(255, 255, 255);
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.cjt-input-field {
+  display: flex;
+  width: 150px;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 25px;
+  align-items: center;
+  text-align: center;
+  color: black;
+}
+
+.cjt-action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 40px;
+  width: 150px;
+  height: 60px;
+  color: white;
+  background-color: #134b6e;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.cjt-spacer {
+  display: flex;
+  width: 150px;
+  height: 25px;
+}
+
+.cjt-errordanger {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+}
